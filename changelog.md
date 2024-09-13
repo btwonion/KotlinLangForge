@@ -1,1 +1,1 @@
-- fix crash on startup on fabric
+Initial release

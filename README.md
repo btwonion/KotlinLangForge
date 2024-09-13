@@ -1,42 +1,35 @@
-# Better Boat Movement
+# ForgeLangKotlin
 
-> Adds quality of life improvements to boats
+> Provides Forge/Neoforge language adapter for Kotlin
 
-## Features
+This mod adds a language adapter for Kotlin and provides multiple libraries.
 
-- configure step height to avoid getting stuck in front of blocks, that are slightly higher
-- configure player ejection time when player loses control of the boat
-- boost boat upwards when underwater
+## Developer usage
+You don't have to implement any dependency to your project. As long as you add the following lines to your 
+(neoforge.)mods.toml you'll be good.
 
-## Configuration
-
-<details>
-<summary>/config/better-boat-movement.json</summary>
-
-```json5
-{
-    "version": 3, // just ignore that, only for migrations
-    "config": {
-        "stepHeight": 0.35, // The amount of blocks you are going to be boosted when triggering a boost
-        "playerEjectTicks": 200.0, // The ticks the game waits before kicking you out of a boat after the player lost control
-        "boostUnderwater": true, // Toggles, whether a boat, which is underwater should be boosted upwards
-        "boostOnBlocks": false, // Toggles, whether a boat, which is on a block should be boosted upwards when running against an elevation
-        "boostOnIce": true, // Toggles, whether a boat, which is on an ice block should be boosted upwards when running against an elevation
-        "boostOnWater": true, // Toggles, whether a boat, which is on water should be boosted upwards when floating against an elevation
-        "onlyForPlayers": true // Toggles, whether a boat should only be boosted when carrying a player
-    }
-}
+**mods.toml**
+```toml
+modLoader = "flk"
+loaderVersion = "[1,)"
 ```
 
-</details>
+Now you can init your mod like any other. Just make sure your Mod class is either a Object or a class with a public 
+and empty constructor.
 
-## Note
-
-Prior to v1.1.1 it is possible to get flagged by anti-cheat on multiplayer servers.
-Please use v1.1.1 or higher to be on the safe side.
+## Libraries
+- org.jetbrains.kotlin:kotlin-stdlib
+- org.jetbrains.kotlin:kotlin-stdlib-jdk8
+- org.jetbrains.kotlin:kotlin-stdlib-jdk7
+- org.jetbrains.kotlin:kotlin-reflect
+- org.jetbrains.kotlinx:kotlinx-serialization-core
+- org.jetbrains.kotlinx:kotlinx-serialization-json
+- org.jetbrains.kotlinx:kotlinx-coroutines-core
+- org.jetbrains.kotlinx:kotlinx-datetime
+- org.jetbrains.kotlinx:kotlinx-io-core
+- org.jetbrains.kotlinx:atomicfu
+- org.jetbrains.kotlinx:kotlinx-datetime
 
 ### Other
-
-Currently supported versions are: 1.20.1, 1.20.4, 1.20.6 and 1.21. This can change in the future!
 
 If you need help with any of my mods just join my [discord server](https://nyon.dev/discord).
