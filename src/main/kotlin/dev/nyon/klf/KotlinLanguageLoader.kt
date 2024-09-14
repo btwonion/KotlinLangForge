@@ -1,4 +1,4 @@
-package dev.nyon.flk
+package dev.nyon.klf
 
 /*? if neoforge {*/
 import net.neoforged.fml.common.Mod
@@ -22,7 +22,7 @@ typealias ModAnnotation = Mod
 class KotlinLanguageLoader : IModLanguageLoader {
     /*? if neoforge && >1.20.4 {*/
     /*override fun name(): String {
-        return "flk"
+        return "klf"
     }
 
     override fun version(): String {

@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-	implementation("dev.nyon:kotlin-lang-forge:$version-$kotlinVersion-$mcVersion+$loader")
+	modImplementation("dev.nyon:KotlinLangForge:$version-$kotlinVersion-$mcVersion+$loader")
 }
 ```
 

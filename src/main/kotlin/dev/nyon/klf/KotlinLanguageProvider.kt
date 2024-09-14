@@ -1,4 +1,4 @@
-package dev.nyon.flk
+package dev.nyon.klf
 
 /*? if <=1.20.4 {*/
 /*? if forge {*/
@@ -14,7 +14,7 @@ import java.util.function.Consumer
 
 class KotlinLanguageProvider : IModLanguageProvider {
     override fun name(): String {
-        return "flk"
+        return "klf"
     }
 
     override fun getFileVisitor(): Consumer<ModFileScanData> {

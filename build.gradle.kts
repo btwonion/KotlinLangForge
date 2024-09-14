@@ -17,7 +17,7 @@ val loader = loom.platform.get()
 
 val beta: Int = property("mod.beta").toString().toInt()
 val majorVersion: String = property("mod.major-version").toString()
-val mcVersion = property("vers.mcVersion").toString() // Pattern is '1.0.0-beta1-1.20.6-pre.2+fabric'
+val mcVersion = property("vers.mcVersion").toString() // Pattern is '1.0.0-beta1-k2.0.20-1.20.6-pre.2+fabric'
 val kotlinVersion = libs.versions.kotlin.orNull
 version = "$majorVersion${if (beta != 0) "-beta$beta" else ""}-k$kotlinVersion-$mcVersion+${loader.name.lowercase()}"
 

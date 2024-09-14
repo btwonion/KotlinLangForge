@@ -1,4 +1,4 @@
-package dev.nyon.flk
+package dev.nyon.klf
 
 import java.util.function.Supplier
 /*? if neoforge && >1.20.4 {*/
@@ -54,7 +54,7 @@ class KotlinModContainer(val info: IModInfo, val modClass: Class<*>) : ModContai
     init {
         try {
             val contextExtensionField = ModContainer::class.java.getDeclaredField("contextExtension")
-            val legacyExtension = Supplier { FlkLoadingContext }
+            val legacyExtension = Supplier { KlfLoadingContext }
             contextExtensionField.set(this, legacyExtension)
         } catch (_: NoSuchFieldException) {}
     }
@@ -78,7 +78,7 @@ class KotlinModContainer(val info: IModInfo, val modClass: Class<*>) : ModContai
     /*?}*/
 
     private fun createMod() {
-        println("Loading ${info.modId} with ForgeLangKotlin.")
+        println("Loading ${info.modId} with KotlinLangForge.")
 
         // Construct instance
         try {
