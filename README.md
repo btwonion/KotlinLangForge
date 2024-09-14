@@ -1,21 +1,35 @@
-# ForgeLangKotlin
+# KotlinLangForge
 
 > Provides Forge/Neoforge language adapter for Kotlin
 
 This mod adds a language adapter for Kotlin and provides multiple libraries.
 
 ## Developer usage
-You don't have to implement any dependency to your project. As long as you add the following lines to your 
-(neoforge.)mods.toml you'll be good.
+To add your language adapter to your mod, add the following lines to your 
+(neoforge.)mods.toml.
 
 **mods.toml**
 ```toml
-modLoader = "flk"
+modLoader = "klf"
 loaderVersion = "[1,)"
 ```
 
-Now you can init your mod like any other. Just make sure your Mod class is either a Object or a class with a public 
+Now you can init your mod like any other. Just make sure your @Mod class is either a object or a class with a public 
 and empty constructor.
+
+If you want to implement the libraries in your mod, just import the following dependency, 
+matching your version of Minecraft, your loader and the (latest) version of Kotlin.
+
+**build.gradle.kts**
+```kotlin
+repositories {
+	maven("https://repo.nyon.dev/releases")
+}
+
+dependencies {
+	implementation("dev.nyon:kotlin-lang-forge:$version-$kotlinVersion-$mcVersion+$loader")
+}
+```
 
 ## Libraries
 - org.jetbrains.kotlin:kotlin-stdlib
