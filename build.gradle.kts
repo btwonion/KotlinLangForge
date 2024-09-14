@@ -42,7 +42,6 @@ loom {
 
 repositories {
     mavenCentral()
-		maven("https://maven.fabricmc.net/releases/")
     maven("https://maven.quiltmc.org/repository/release/")
     maven("https://maven.neoforged.net/releases/")
 }
