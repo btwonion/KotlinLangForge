@@ -23,11 +23,11 @@ matching your version of Minecraft, your loader and the (latest) version of Kotl
 **build.gradle.kts**
 ```kotlin
 repositories {
-	maven("https://repo.nyon.dev/releases")
+  maven("https://repo.nyon.dev/releases")
 }
 
 dependencies {
-	modImplementation("dev.nyon:KotlinLangForge:$version-$kotlinVersion-$mcVersion+$loader")
+  modImplementation("dev.nyon:KotlinLangForge:$version-$kotlinVersion-$mcVersion+$loader")
 }
 ```
 
