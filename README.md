@@ -1,6 +1,6 @@
 # KotlinLangForge
 
-> Provides Forge/Neoforge language adapter for Kotlin
+> Provides Kotlin language adapter for Forge and Neoforge
 
 This mod adds a language adapter for Kotlin and provides multiple libraries.
 

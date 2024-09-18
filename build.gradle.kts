@@ -44,6 +44,7 @@ repositories {
     mavenCentral()
     maven("https://maven.quiltmc.org/repository/release/")
     maven("https://maven.neoforged.net/releases/")
+    maven("https://maven.minecraftforge.net/")
 }
 
 dependencies {
@@ -126,8 +127,7 @@ publishMods {
     }
 
     modrinth {
-        // TODO project id
-        projectId = ""
+        projectId = "1vrSzlao"
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
     }
