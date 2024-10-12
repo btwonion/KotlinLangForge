@@ -1,6 +1,6 @@
 # KotlinLangForge
 
-> Provides Kotlin language adapter for Forge and Neoforge
+> Provides a Kotlin language adapter for Forge and Neoforge
 
 This mod adds a language adapter for Kotlin and provides multiple libraries.
 
@@ -41,8 +41,8 @@ dependencies {
 - org.jetbrains.kotlinx:kotlinx-coroutines-core
 - org.jetbrains.kotlinx:kotlinx-datetime
 - org.jetbrains.kotlinx:kotlinx-io-core
+- org.jetbrains.kotlinx:kotlinx-io-bytestring
 - org.jetbrains.kotlinx:atomicfu
-- org.jetbrains.kotlinx:kotlinx-datetime
 
 ### Other
 
