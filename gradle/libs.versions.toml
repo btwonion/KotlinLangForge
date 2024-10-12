@@ -1,12 +1,8 @@
 [versions]
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 mod-publish = "0.5.+"
 architectury-loom = "1.7-SNAPSHOT"
-vineflower = "1.10.1"
 shadow = "8.3.3"
-
-[libraries]
-vineflower = { module = "org.vineflower:vineflower", version.ref = "vineflower" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

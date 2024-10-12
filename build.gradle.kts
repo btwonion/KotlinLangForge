@@ -59,8 +59,6 @@ dependencies {
         officialMojangMappings()
     })
 
-    implementation(libs.vineflower)
-
     if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
@@ -69,13 +67,13 @@ dependencies {
         "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
         "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
         "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
-        "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.1",
-        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1",
+        "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0",
         "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1",
-        "org.jetbrains.kotlinx:kotlinx-io-core:0.5.3",
-        "org.jetbrains.kotlinx:atomicfu:0.25.0",
-        "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1"
+        "org.jetbrains.kotlinx:kotlinx-io-core:0.5.4",
+        "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.5.4",
+        "org.jetbrains.kotlinx:atomicfu:0.25.0"
     ).forEach {
         if (stonecutter.eval(mcVersion, ">=1.20.6")) include(it)
         else implementation(it)

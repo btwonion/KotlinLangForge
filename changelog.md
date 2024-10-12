@@ -1,1 +1,3 @@
-Initial release
+- update to kotlin 2.0.21
+- update kotlinx.serialization, kotlinx-io
+- add kotlinx-io-bytestring
