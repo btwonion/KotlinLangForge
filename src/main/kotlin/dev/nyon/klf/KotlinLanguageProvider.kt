@@ -1,15 +1,15 @@
 package dev.nyon.klf
 
 /*? if <=1.20.4 {*/
-/*? if forge {*/
-/*import net.minecraftforge.forgespi.language.ILifecycleEvent
+/*/^? if forge {^/
+/^import net.minecraftforge.forgespi.language.ILifecycleEvent
 import net.minecraftforge.forgespi.language.IModLanguageProvider
 import net.minecraftforge.forgespi.language.ModFileScanData
 import java.util.function.Supplier
-*//*?} else {*/
+^//^?} else {^/
 import net.neoforged.neoforgespi.language.IModLanguageProvider
 import net.neoforged.neoforgespi.language.ModFileScanData
-/*?}*/
+/^?}^/
 import java.util.function.Consumer
 
 class KotlinLanguageProvider : IModLanguageProvider {
@@ -31,5 +31,5 @@ class KotlinLanguageProvider : IModLanguageProvider {
     }
 
     //? if forge
-    /*override fun <R : ILifecycleEvent<R>> consumeLifecycleEvent(consumeEvent: Supplier<R>) {}*/
-}/*?}*/
+    /^override fun <R : ILifecycleEvent<R>> consumeLifecycleEvent(consumeEvent: Supplier<R>) {}^/
+}*//*?}*/
