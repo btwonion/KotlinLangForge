@@ -1,6 +1,9 @@
 @file:Suppress("SpellCheckingInspection", "UnstableApiUsage", "RedundantNullableReturnType")
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
 import net.fabricmc.loom.util.ModPlatform
+import org.apache.tools.zip.ZipOutputStream
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -9,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.architectury.loom)
     alias(libs.plugins.mod.publish)
+    alias(libs.plugins.shadow)
 
     `maven-publish`
 }
@@ -72,10 +76,14 @@ dependencies {
         "org.jetbrains.kotlinx:kotlinx-io-core:0.5.3",
         "org.jetbrains.kotlinx:atomicfu:0.25.0",
         "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1"
-    ).forEach(::include)
+    ).forEach {
+        if (stonecutter.eval(mcVersion, ">=1.20.6")) include(it)
+        else implementation(it)
+    }
 }
 
-val javaVersion = if (stonecutter.compare(mcVersion, "1.20.4") > 0) 21 else 17
+val javaVersion =
+    if (stonecutter.eval(mcVersion, ">1.20.4")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
 val modName = property("mod.name").toString()
 val modId = property("mod.id").toString()
 tasks {
@@ -92,17 +100,86 @@ tasks {
 
     withType<KotlinCompile> {
         compilerOptions {
-            jvmTarget = JvmTarget.fromTarget(javaVersion.toString())
+            jvmTarget = JvmTarget.fromTarget(javaVersion.toString().let { if (it == "8") "1.8" else it })
         }
     }
 
     withType<Jar> {
         manifest.attributes(
             "Manifest-Version" to "1.0",
-            "FMLModType" to if (stonecutter.compare(mcVersion, "1.20.4") <= 0) "LANGPROVIDER" else "LIBRARY",
+            "FMLModType" to if (stonecutter.eval(mcVersion, "<=1.20.4")) "LANGPROVIDER" else "LIBRARY",
             "Automatic-Module-Name" to modId,
             "Implementation-Version" to project.version
         )
+    }
+
+    withType<ShadowJar> {
+        archiveClassifier = "shadow"
+
+        dependencies {
+            include {
+                it.moduleGroup == "org.jetbrains.kotlin" || it.moduleGroup == "org.jetbrains.kotlinx"
+            }
+        }
+
+        class DontIncludeMcFilesTransformer : com.github.jengelman.gradle.plugins.shadow.transformers.Transformer {
+            @Input
+            @Optional
+            val invalidEndings = listOf(
+                ".nbt",
+                ".json",
+                ".mcmeta",
+                ".mcassetsroot",
+                ".tiny",
+                ".bin",
+                ".jfc",
+                ".png",
+                ".fsh",
+                ".vsh",
+                ".glsl",
+                ".txt",
+                ".pro"
+            )
+
+            @Input
+            @Optional
+            val validEndings = listOf("klf/icon.png")
+
+            override fun canTransformResource(element: FileTreeElement?): Boolean {
+                val path = element?.relativePath?.pathString ?: return false
+                if (validEndings.any { path.endsWith(it) }) return false
+                return invalidEndings.any { path.endsWith(it) }
+            }
+
+            override fun transform(context: TransformerContext?) {}
+
+            override fun hasTransformedResource(): Boolean {
+                return false
+            }
+
+            override fun modifyOutputStream(
+                os: ZipOutputStream?, preserveFileTimestamps: Boolean
+            ) {
+            }
+
+            override fun getName(): String {
+                return "DontIncludeMcFilesTransformer"
+            }
+        }
+
+        transform(DontIncludeMcFilesTransformer::class.java)
+    }
+
+    remapJar {
+        if (stonecutter.eval(mcVersion, "<=1.20.4")) {
+            dependsOn("shadowJar")
+            val shadowJar = shadowJar.get()
+            inputFile.set(shadowJar.archiveFile)
+        }
+    }
+
+    build {
+        if (stonecutter.eval(mcVersion, "<=1.20.4")) dependsOn("shadowJar")
     }
 }
 

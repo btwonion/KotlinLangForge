@@ -50,7 +50,6 @@ class KotlinModContainer(val info: IModInfo, val modClass: Class<*>) : ModContai
     }
     *//*?}*/
 
-    /*? if neoforge {*/
     init {
         try {
             val contextExtensionField = ModContainer::class.java.getDeclaredField("contextExtension")
@@ -59,6 +58,7 @@ class KotlinModContainer(val info: IModInfo, val modClass: Class<*>) : ModContai
         } catch (_: NoSuchFieldException) {}
     }
 
+    /*? if neoforge {*/
     override fun getEventBus(): IEventBus? {
         return BusBuilder.builder()
             .setExceptionHandler { _, event, listeners, busId, throwable ->

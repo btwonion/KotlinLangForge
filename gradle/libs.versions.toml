@@ -3,6 +3,7 @@ kotlin = "2.0.20"
 mod-publish = "0.5.+"
 architectury-loom = "1.7-SNAPSHOT"
 vineflower = "1.10.1"
+shadow = "8.3.3"
 
 [libraries]
 vineflower = { module = "org.vineflower:vineflower", version.ref = "vineflower" }
@@ -11,3 +12,4 @@ vineflower = { module = "org.vineflower:vineflower", version.ref = "vineflower" 
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 architectury-loom = { id = "dev.architectury.loom", version.ref = "architectury-loom" }
 mod-publish = { id = "me.modmuss50.mod-publish-plugin", version.ref = "mod-publish" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
