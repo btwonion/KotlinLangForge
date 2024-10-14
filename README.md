@@ -38,7 +38,9 @@ dependencies {
 - org.jetbrains.kotlin:kotlin-reflect
 - org.jetbrains.kotlinx:kotlinx-serialization-core
 - org.jetbrains.kotlinx:kotlinx-serialization-json
+- org.jetbrains.kotlinx:kotlinx-serialization-cbor
 - org.jetbrains.kotlinx:kotlinx-coroutines-core
+- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8
 - org.jetbrains.kotlinx:kotlinx-datetime
 - org.jetbrains.kotlinx:kotlinx-io-core
 - org.jetbrains.kotlinx:kotlinx-io-bytestring
