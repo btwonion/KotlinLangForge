@@ -1,3 +1,3 @@
-- update to kotlin 2.0.21
-- update kotlinx.serialization, kotlinx-io
-- add kotlinx-io-bytestring
+- fix mod icon
+- fix maven dependencies on >=1.20.4
+- remove vineflower
