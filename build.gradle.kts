@@ -75,8 +75,8 @@ dependencies {
         "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.5.4",
         "org.jetbrains.kotlinx:atomicfu:0.25.0"
     ).forEach {
-        if (stonecutter.eval(mcVersion, ">=1.20.6")) implementation(include(it)!!)
-        else implementation(it)
+        if (stonecutter.eval(mcVersion, ">=1.20.6")) modApi(include(it)!!)
+        else modApi(it)
     }
 }
 
@@ -141,11 +141,11 @@ tasks {
 
             @Input
             @Optional
-            val validEndings = listOf("klf/icon.png")
+            val exceptions = listOf("klf/icon.png")
 
             override fun canTransformResource(element: FileTreeElement?): Boolean {
                 val path = element?.relativePath?.pathString ?: return false
-                if (validEndings.any { path.endsWith(it) }) return false
+                if (exceptions.any { path.endsWith(it) }) return false
                 return invalidEndings.any { path.endsWith(it) }
             }
 

@@ -1,3 +1,1 @@
-- fix mod icon
-- fix maven dependencies on >=1.20.4
-- remove vineflower
+- fix maven publication metadata
