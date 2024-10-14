@@ -54,6 +54,9 @@ repositories {
 val apiAndShadow by configurations.creating {
     extendsFrom(configurations.modApi.get())
     extendsFrom(configurations.shadow.get())
+
+    exclude("org.jetbrains", "annotations")
+    exclude("org.intellij", "lang")
 }
 
 dependencies {
@@ -121,12 +124,6 @@ tasks {
     withType<ShadowJar> {
         archiveClassifier = "shadow"
         configurations = listOf(apiAndShadow)
-
-        dependencies {
-            exclude {
-                it.moduleGroup == "org.jetbrains.annotations" || it.moduleGroup == "org.intellij"
-            }
-        }
 
         class DontIncludeMcFilesTransformer : com.github.jengelman.gradle.plugins.shadow.transformers.Transformer {
             @Input
