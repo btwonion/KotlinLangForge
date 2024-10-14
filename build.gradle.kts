@@ -51,6 +51,11 @@ repositories {
     maven("https://maven.minecraftforge.net/")
 }
 
+val apiAndShadow by configurations.creating {
+    extendsFrom(configurations.modApi.get())
+    extendsFrom(configurations.shadow.get())
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.layered {
@@ -69,14 +74,16 @@ dependencies {
         "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
         "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3",
         "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3",
+        "org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.7.3",
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.9.0",
         "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1",
         "org.jetbrains.kotlinx:kotlinx-io-core:0.5.4",
         "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.5.4",
         "org.jetbrains.kotlinx:atomicfu:0.25.0"
     ).forEach {
         if (stonecutter.eval(mcVersion, ">=1.20.6")) modApi(include(it)!!)
-        else modApi(it)
+        else apiAndShadow(it)
     }
 }
 
@@ -113,10 +120,11 @@ tasks {
 
     withType<ShadowJar> {
         archiveClassifier = "shadow"
+        configurations = listOf(apiAndShadow)
 
         dependencies {
-            include {
-                it.moduleGroup == "org.jetbrains.kotlin" || it.moduleGroup == "org.jetbrains.kotlinx"
+            exclude {
+                it.moduleGroup == "org.jetbrains.annotations" || it.moduleGroup == "org.intellij"
             }
         }
 
@@ -174,10 +182,6 @@ tasks {
             val shadowJar = shadowJar.get()
             inputFile.set(shadowJar.archiveFile)
         }
-    }
-
-    build {
-        if (stonecutter.eval(mcVersion, "<=1.20.4")) dependsOn("shadowJar")
     }
 }
 
