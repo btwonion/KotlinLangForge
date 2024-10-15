@@ -1,2 +1,1 @@
-- fix maven publication metadata
-- add org.jetbrains.kotlinx:kotlinx-coroutines-jdk8, org.jetbrains.kotlinx:kotlinx-serialization-cbor
+- add public mod-bus
