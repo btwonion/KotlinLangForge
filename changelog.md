@@ -1,1 +1,3 @@
 - add public mod-bus
+- fix java-compile version
+- reliably load mod classes on neoforge environments

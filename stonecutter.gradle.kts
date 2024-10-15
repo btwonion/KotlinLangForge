@@ -11,7 +11,7 @@ import java.time.Instant
 plugins {
     id("dev.kikugie.stonecutter")
 }
-stonecutter active "1.20.6-neoforge" /* [SC] DO NOT EDIT */
+stonecutter active "1.21-neoforge" /* [SC] DO NOT EDIT */
 
 stonecutter configureEach {
     val currentPlatform = current.project.split('-')[1]
@@ -22,6 +22,11 @@ stonecutter configureEach {
 stonecutter registerChiseled tasks.register("buildAllVersions", stonecutter.chiseled) {
     group = "mod"
     ofTask("build")
+}
+
+stonecutter registerChiseled tasks.register ("publishAllToMavenLocal", stonecutter.chiseled) {
+    group = "mod"
+    ofTask("publishToMavenLocal")
 }
 
 stonecutter registerChiseled tasks.register("releaseAllVersions", stonecutter.chiseled) {

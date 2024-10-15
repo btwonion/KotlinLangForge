@@ -9,19 +9,19 @@ import net.neoforged.fml.ModLoadingIssue
 import net.neoforged.neoforgespi.language.IModInfo
 /*?} else {*/
 /*/^? if forge {^/
-import net.minecraftforge.fml.ModContainer
+/^import net.minecraftforge.fml.ModContainer
 import net.minecraftforge.fml.ModLoadingException
 import net.minecraftforge.fml.ModLoadingStage
 import net.minecraftforge.forgespi.language.IModInfo
-/^?} else {^/
-/^import net.neoforged.bus.EventBusErrorMessage
+^//^?} else {^/
+import net.neoforged.bus.EventBusErrorMessage
 import net.neoforged.bus.api.BusBuilder
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.ModLoadingException
 import net.neoforged.fml.ModLoadingStage
 import net.neoforged.neoforgespi.language.IModInfo
-^//^?}^/
+/^?}^/
 *//*?}*/
 
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")

@@ -32,21 +32,21 @@ class KotlinLanguageLoader : IModLanguageLoader {
     override fun loadMod(
         info: IModInfo, scanResults: ModFileScanData, layer: ModuleLayer
     ): ModContainer {
-        val modClassName = scanResults.annotations.find { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }?.clazzName
-        val modClass = Class.forName(modClassName)
+        val modClassName = scanResults.annotations.find { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }?.annotatedClassName
+        val modClass = Class.forName(layer.findModule(info.owningFile.moduleName()).orElseThrow(), modClassName)
         return KotlinModContainer(info, modClass)
     }
     /*?} else {*/
     /*@Suppress("UNCHECKED_CAST")
     override fun <T : Any> loadMod(
-        info: IModInfo /^? if <=1.16.5 {^/, modClassLoader: ClassLoader/^?}^/, scanResults: ModFileScanData /^? if >1.16.5 {^//^, layer: ModuleLayer^//^?}^/
+        info: IModInfo /^? if <=1.16.5 {^//^, modClassLoader: ClassLoader^//^?}^/, scanResults: ModFileScanData /^? if >1.16.5 {^/, layer: ModuleLayer/^?}^/
     ): T {
-        val modClassName = scanResults.annotations.find { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }?.clazzName
+        val modClassName = scanResults.annotations.find { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }?.annotatedClassName
         val modClass = Class.forName(modClassName)
         return KotlinModContainer(info, modClass) as T
     }
 *//*?}*/
 }
 
-val ModFileScanData.AnnotationData.clazzName
+val ModFileScanData.AnnotationData.annotatedClassName
     get() = /*? if >1.16.5 {*/ clazz.className /*?} else {*/ /*classType.className *//*?}*/
