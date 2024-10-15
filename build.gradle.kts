@@ -87,7 +87,7 @@ dependencies {
 }
 
 val javaVersion =
-    if (stonecutter.eval(mcVersion, ">=1.20.4")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
+    if (stonecutter.eval(mcVersion, ">=1.20.6")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
 val modName = property("mod.name").toString()
 val modId = property("mod.id").toString()
 tasks {
