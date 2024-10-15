@@ -85,13 +85,13 @@ dependencies {
         "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.5.4",
         "org.jetbrains.kotlinx:atomicfu:0.25.0"
     ).forEach {
-        if (stonecutter.eval(mcVersion, ">=1.20.6")) modApi(include(it)!!)
+        if (stonecutter.eval(mcVersion, ">1.20.4")) modApi(include(it)!!)
         else apiAndShadow(it)
     }
 }
 
 val javaVersion =
-    if (stonecutter.eval(mcVersion, ">1.20.4")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
+    if (stonecutter.eval(mcVersion, ">=1.20.4")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
 val modName = property("mod.name").toString()
 val modId = property("mod.id").toString()
 tasks {
@@ -117,7 +117,7 @@ tasks {
             "Manifest-Version" to "1.0",
             "FMLModType" to if (stonecutter.eval(mcVersion, "<=1.20.4")) "LANGPROVIDER" else "LIBRARY",
             "Automatic-Module-Name" to modId,
-            "Implementation-Version" to project.version
+            "Implementation-Version" to majorVersion
         )
     }
 
@@ -219,7 +219,7 @@ publishing {
     repositories {
         maven {
             name = "nyon"
-            url = uri("https://repo.nyon.dev/releases")
+            url = if (beta != 0) uri("https://repo.nyon.dev/snapshots") else uri("https://repo.nyon.dev/releases")
             credentials {
                 username = providers.environmentVariable("NYON_USERNAME").orNull
                 password = providers.environmentVariable("NYON_PASSWORD").orNull
