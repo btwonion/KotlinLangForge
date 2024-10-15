@@ -31,6 +31,9 @@ dependencies {
 }
 ```
 
+### Mod Bus
+To use the mod bus, just implement `dev.nyon.klf.MOD_BUS`.
+
 ## Libraries
 - org.jetbrains.kotlin:kotlin-stdlib
 - org.jetbrains.kotlin:kotlin-stdlib-jdk8
