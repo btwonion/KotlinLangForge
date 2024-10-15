@@ -52,7 +52,7 @@ repositories {
 }
 
 val apiAndShadow by configurations.creating {
-    extendsFrom(configurations.modApi.get())
+    extendsFrom(configurations.api.get())
     extendsFrom(configurations.shadow.get())
 
     exclude("org.jetbrains", "annotations")
@@ -61,11 +61,7 @@ val apiAndShadow by configurations.creating {
 
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
-    mappings(loom.layered {
-        val quiltMappings: String = property("vers.deps.quiltmappings").toString()
-        if (quiltMappings.isNotEmpty()) mappings("org.quiltmc:quilt-mappings:$quiltMappings:intermediary-v2")
-        officialMojangMappings()
-    })
+    mappings(loom.officialMojangMappings())
 
     if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
@@ -85,7 +81,7 @@ dependencies {
         "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.5.4",
         "org.jetbrains.kotlinx:atomicfu:0.25.0"
     ).forEach {
-        if (stonecutter.eval(mcVersion, ">1.20.4")) modApi(include(it)!!)
+        if (stonecutter.eval(mcVersion, ">1.20.4")) api(include(it)!!)
         else apiAndShadow(it)
     }
 }
