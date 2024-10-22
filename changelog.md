@@ -1,1 +1,2 @@
 - Bump org.jetbrains.kotlinx:atomicfu from 0.25.0 to 0.26.0
+- add support for 1.21.2
