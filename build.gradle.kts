@@ -78,7 +78,7 @@ dependencies {
         "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.9.0",
         "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1",
         "org.jetbrains.kotlinx:kotlinx-io-core:0.6.0",
-        "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.5.4",
+        "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.6.0",
         "org.jetbrains.kotlinx:atomicfu:0.26.0"
     ).forEach {
         if (stonecutter.eval(mcVersion, ">1.20.4")) api(include(it)!!)
