@@ -22,8 +22,9 @@ val loader = loom.platform.get()
 val beta: Int = property("mod.beta").toString().toInt()
 val majorVersion: String = property("mod.major-version").toString()
 val mcVersion = property("vers.mcVersion").toString() // Pattern is '1.0.0-beta1-k2.0.20-1.20.6-pre.2+fabric'
+val lPVersion = stonecutter.current.project.split("-")[0]
 val kotlinVersion = libs.versions.kotlin.orNull
-version = "$majorVersion${if (beta != 0) "-beta$beta" else ""}-k$kotlinVersion-$mcVersion+${loader.name.lowercase()}"
+version = "$majorVersion${if (beta != 0) "-beta$beta" else ""}-k$kotlinVersion-$lPVersion+${loader.name.lowercase()}"
 
 group = property("mod.group").toString()
 val githubRepo = property("mod.repo").toString()
@@ -51,7 +52,7 @@ repositories {
     maven("https://maven.minecraftforge.net/")
 }
 
-val apiAndShadow by configurations.creating {
+val apiAndShadow: Configuration by configurations.creating {
     extendsFrom(configurations.api.get())
     extendsFrom(configurations.shadow.get())
 
@@ -81,8 +82,8 @@ dependencies {
         "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.6.0",
         "org.jetbrains.kotlinx:atomicfu:0.26.0"
     ).forEach {
-        if (stonecutter.eval(mcVersion, ">1.20.4")) api(include(it)!!)
-        else apiAndShadow(it)
+        if (listOf("1.0", "2.0").contains(lPVersion)) apiAndShadow(it)
+        else api(include(it)!!)
     }
 }
 
@@ -111,7 +112,7 @@ tasks {
     withType<Jar> {
         manifest.attributes(
             "Manifest-Version" to "1.0",
-            "FMLModType" to if (stonecutter.eval(mcVersion, "<=1.20.4")) "LANGPROVIDER" else "LIBRARY",
+            "FMLModType" to if (listOf("1.0", "2.0").contains(lPVersion)) "LANGPROVIDER" else "LIBRARY",
             "Automatic-Module-Name" to modId,
             "Implementation-Version" to majorVersion
         )
@@ -144,33 +145,30 @@ tasks {
             @Optional
             val exceptions = listOf("klf/icon.png")
 
-            override fun canTransformResource(element: FileTreeElement?): Boolean {
-                val path = element?.relativePath?.pathString ?: return false
+            override fun canTransformResource(element: FileTreeElement): Boolean {
+                val path = element.relativePath.pathString
                 if (exceptions.any { path.endsWith(it) }) return false
                 return invalidEndings.any { path.endsWith(it) }
             }
 
-            override fun transform(context: TransformerContext?) {}
+            override fun transform(context: TransformerContext) {}
 
             override fun hasTransformedResource(): Boolean {
                 return false
             }
 
-            override fun modifyOutputStream(
-                os: ZipOutputStream?, preserveFileTimestamps: Boolean
-            ) {
-            }
+            override fun modifyOutputStream(os: ZipOutputStream, preserveFileTimestamps: Boolean) {}
 
             override fun getName(): String {
                 return "DontIncludeMcFilesTransformer"
             }
         }
 
-        transform(DontIncludeMcFilesTransformer::class.java)
+        transform(DontIncludeMcFilesTransformer())
     }
 
     remapJar {
-        if (stonecutter.eval(mcVersion, "<=1.20.4")) {
+        if (listOf("1.0", "2.0").contains(lPVersion)) {
             dependsOn("shadowJar")
             val shadowJar = shadowJar.get()
             inputFile.set(shadowJar.archiveFile)

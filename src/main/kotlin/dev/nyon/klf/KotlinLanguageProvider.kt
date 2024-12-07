@@ -1,6 +1,6 @@
 package dev.nyon.klf
 
-/*? if <=1.20.4 {*/
+/*? if lp: <=2.0 {*/
 /*/^? if forge {^/
 /^import net.minecraftforge.forgespi.language.ILifecycleEvent
 import net.minecraftforge.forgespi.language.IModLanguageProvider

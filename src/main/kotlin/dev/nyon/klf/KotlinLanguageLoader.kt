@@ -4,7 +4,7 @@ package dev.nyon.klf
 import net.neoforged.fml.common.Mod
 import net.neoforged.neoforgespi.language.IModInfo
 import net.neoforged.neoforgespi.language.ModFileScanData
-/*? if >1.20.4 {*/
+/*? if lp: >=3.0 {*/
 import net.neoforged.fml.ModContainer
 import net.neoforged.neoforgespi.language.IModLanguageLoader
 /*?} else {*/
@@ -20,7 +20,7 @@ import net.minecraftforge.forgespi.language.ModFileScanData
 typealias ModAnnotation = Mod
 
 class KotlinLanguageLoader : IModLanguageLoader {
-    /*? if neoforge && >1.20.4 {*/
+    /*? if lp: >=3.0 {*/
     override fun name(): String {
         return "klf"
     }
@@ -39,7 +39,7 @@ class KotlinLanguageLoader : IModLanguageLoader {
     /*?} else {*/
     /*@Suppress("UNCHECKED_CAST")
     override fun <T : Any> loadMod(
-        info: IModInfo /^? if <=1.16.5 {^//^, modClassLoader: ClassLoader^//^?}^/, scanResults: ModFileScanData /^? if >1.16.5 {^/, layer: ModuleLayer/^?}^/
+        info: IModInfo /^? if lp: =1.0 {^//^, modClassLoader: ClassLoader^//^?}^/, scanResults: ModFileScanData /^? if lp: >1.0 {^/, layer: ModuleLayer/^?}^/
     ): T {
         val modClassName = scanResults.annotations.find { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }?.annotatedClassName
         val modClass = Class.forName(modClassName)
@@ -49,4 +49,4 @@ class KotlinLanguageLoader : IModLanguageLoader {
 }
 
 val ModFileScanData.AnnotationData.annotatedClassName
-    get() = /*? if >1.16.5 {*/ clazz.className /*?} else {*/ /*classType.className *//*?}*/
+    get() = /*? if lp: >=2.0 {*/ clazz.className /*?} else {*/ /*classType.className *//*?}*/

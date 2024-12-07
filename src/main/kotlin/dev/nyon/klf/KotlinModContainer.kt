@@ -1,7 +1,7 @@
 package dev.nyon.klf
 
 import java.util.function.Supplier
-/*? if neoforge && >1.20.4 {*/
+/*? if lp: >=3.0 {*/
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.ModLoadingException
@@ -28,7 +28,7 @@ import net.neoforged.neoforgespi.language.IModInfo
 class KotlinModContainer(val info: IModInfo, val modClass: Class<*>) : ModContainer(info) {
     private var instance: Any? = null
 
-    /*? if <=1.20.4 {*/
+    /*? if lp: <=2.0 {*/
     /*init {
         activityMap[ModLoadingStage.CONSTRUCT] = Runnable(::createMod)
     }
@@ -68,7 +68,7 @@ class KotlinModContainer(val info: IModInfo, val modClass: Class<*>) : ModContai
             // Use object or class without any constructors to construct
             instance = modClass.kotlin.objectInstance ?: modClass.getDeclaredConstructor().newInstance()
         } catch (e: Throwable) {
-            throw /*? if <=1.20.4 {*/ /*ModLoadingException(info, ModLoadingStage.CONSTRUCT, "fml.modloading.failedtoloadmod", e, modClass)
+            throw /*? if lp: <=2.0 {*/ /*ModLoadingException(info, ModLoadingStage.CONSTRUCT, "fml.modloading.failedtoloadmod", e, modClass)
             *//*?} else {*/ ModLoadingException(ModLoadingIssue.error("fml.modloadingissue.failedtoloadmod", e)) /*?}*/
         }
     }

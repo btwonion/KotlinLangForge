@@ -7,7 +7,7 @@ import net.neoforged.fml.event.IModBusEvent
 /*?} else {*/
 /*import net.minecraftforge.eventbus.EventBusErrorMessage
 import net.minecraftforge.eventbus.api.BusBuilder
-//? if >1.16.5
+//? if lp: >1.0
 import net.minecraftforge.fml.event.IModBusEvent
 *//*?}*/
 
@@ -22,7 +22,7 @@ val MOD_BUS = BusBuilder.builder()
             )
         )
     }
-    //? if >1.16.5
+    //? if lp: >1.0
     .markerType(IModBusEvent::class.java)
     //? if neoforge
     .allowPerPhasePost()
