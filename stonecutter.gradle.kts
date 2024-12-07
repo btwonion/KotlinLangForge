@@ -11,11 +11,15 @@ import java.time.Instant
 plugins {
     id("dev.kikugie.stonecutter")
 }
-stonecutter active "1.21-neoforge" /* [SC] DO NOT EDIT */
+stonecutter active "3.0-neoforge" /* [SC] DO NOT EDIT */
 
-stonecutter configureEach {
-    val currentPlatform = current.project.split('-')[1]
-    val platforms = listOf("neoforge", "forge").map { it to (currentPlatform == it) }
+stonecutter parameters {
+    val platform = node!!.property("loom.platform")
+    val platforms = listOf("forge", "neoforge").map { it to (platform == it) }
+
+    val lPVersion = node!!.name.split("-")[0]
+    dependency("lp", lPVersion)
+
     consts(platforms)
 }
 
@@ -71,7 +75,8 @@ tasks.register("postUpdate") {
                 color = color,
                 fields = listOf(
                     Field(
-                        "Supported versions", stonecutter.projects.map { it.property("vers.supportedMcVersions").toString().split(',') }.flatten().toSet().joinToString(), false
+                        "Supported versions", stonecutter.tree.nodes.map { it.property("supportedMcVersions").toString().split(',') }
+                            .flatten().toSet().joinToString(), false
                     ),
                     Field(
                         "Supported loaders", supportedLoaders.joinToString(), false
