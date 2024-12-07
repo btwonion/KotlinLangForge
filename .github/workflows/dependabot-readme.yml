@@ -1,7 +1,7 @@
 name: Dependabot MD Updates
 on: pull_request
 jobs:
-  dependabot:
+  markdown-updates:
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
@@ -12,7 +12,6 @@ jobs:
         uses: dependabot/fetch-metadata@v2
       - uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -32,6 +31,6 @@ jobs:
       - name: Commit
         uses: EndBug/add-and-commit@v9
         with:
-          author_name: 'Markdown Agent'
-          author_email: 'support@github.com'
+          author_name: 'github-actions'
+          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
           message: 'Update markdown'
