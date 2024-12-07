@@ -1,0 +1,33 @@
+name: Dependabot MD Updates
+on: pull_request
+jobs:
+  dependabot:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: Fetch Dependabot metadata
+        id: dependabot-metadata
+        uses: dependabot/fetch-metadata@v2
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Update Readme
+        run: ./gradlew processReadMeTemplate
+      - name: Update Changelog
+        env:
+          PR_NAME: ${{ github.event.pull_request.html_url }}
+        run: echo '- $PR_NAME' >> changelog.md
+      - name: Commit
+        run: |
+          git add .
+          git commit -m "Update markdown"
+          git push

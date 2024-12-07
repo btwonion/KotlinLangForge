@@ -60,6 +60,22 @@ val apiAndShadow: Configuration by configurations.creating {
     exclude("org.intellij", "lang")
 }
 
+val inclusions = listOf(
+    "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+    "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
+    "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+    "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
+    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3",
+    "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3",
+    "org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.7.3",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.9.0",
+    "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1",
+    "org.jetbrains.kotlinx:kotlinx-io-core:0.6.0",
+    "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.6.0",
+    "org.jetbrains.kotlinx:atomicfu:0.26.0"
+)
+
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.officialMojangMappings())
@@ -67,21 +83,7 @@ dependencies {
     if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
-    listOf(
-        "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
-        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
-        "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
-        "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3",
-        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3",
-        "org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.7.3",
-        "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0",
-        "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.9.0",
-        "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1",
-        "org.jetbrains.kotlinx:kotlinx-io-core:0.6.0",
-        "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.6.0",
-        "org.jetbrains.kotlinx:atomicfu:0.26.0"
-    ).forEach {
+    inclusions.forEach {
         if (listOf("1.0", "2.0").contains(lPVersion)) apiAndShadow(it)
         else api(include(it)!!)
     }
@@ -97,6 +99,14 @@ tasks {
 
         dependsOn("publishMods")
         dependsOn("publish")
+    }
+
+    register("processReadMeTemplate") {
+        group = "publishing"
+
+        val templateText = rootProject.file("README-template.md").readText()
+        val inclusionsReplacement = inclusions.joinToString("\n- ", prefix = "- ")
+        rootProject.file("README.md").writeText(templateText.replace("{inclusions}", inclusionsReplacement))
     }
 
     withType<JavaCompile> {
