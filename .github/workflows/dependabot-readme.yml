@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
-      - name: Fetch Dependabot metadata
-        id: dependabot-metadata
-        uses: dependabot/fetch-metadata@v2
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -31,6 +28,5 @@ jobs:
       - name: Commit
         uses: EndBug/add-and-commit@v9
         with:
-          author_name: 'github-actions'
-          author_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          default_author: 'github-actions <41898282+github-actions[bot]@users.noreply.github.com>'
           message: 'Update markdown'
