@@ -2,8 +2,7 @@ name: Dependabot MD Updates
 on: pull_request
 jobs:
   markdown-updates:
-    permissions:
-      pull-requests: write
+    permissions: write-all
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
