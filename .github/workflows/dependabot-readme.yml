@@ -27,7 +27,8 @@ jobs:
           PR_NAME: ${{ github.event.pull_request.html_url }}
         run: echo '- $PR_NAME' >> changelog.md
       - name: Commit
-        run: |
-          git add .
-          git commit -m "Update markdown"
-          git push
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: 'Markdown Agent'
+          author_email: 'support@github.com'
+          message: 'Update markdown'
