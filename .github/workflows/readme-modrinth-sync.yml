@@ -3,7 +3,7 @@ name: sync-readme
 on:
   push:
     paths:
-      - "../../README-template.md"
+      - "../../README.md"
     branches:
       - master
   workflow_dispatch:
