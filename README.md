@@ -65,7 +65,7 @@ To use the mod bus, just implement `dev.nyon.klf.MOD_BUS`.
 - org.jetbrains.kotlinx:kotlinx-datetime:0.6.1
 - org.jetbrains.kotlinx:kotlinx-io-core:0.6.0
 - org.jetbrains.kotlinx:kotlinx-io-bytestring:0.6.0
-- org.jetbrains.kotlinx:atomicfu:0.26.0
+- org.jetbrains.kotlinx:atomicfu:0.26.1
 
 ### Other
 
