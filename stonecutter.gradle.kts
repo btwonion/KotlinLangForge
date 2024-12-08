@@ -28,11 +28,6 @@ stonecutter registerChiseled tasks.register("buildAllVersions", stonecutter.chis
     ofTask("build")
 }
 
-stonecutter registerChiseled tasks.register ("publishAllToMavenLocal", stonecutter.chiseled) {
-    group = "mod"
-    ofTask("publishToMavenLocal")
-}
-
 stonecutter registerChiseled tasks.register("releaseAllVersions", stonecutter.chiseled) {
     group = "mod"
     ofTask("releaseMod")
