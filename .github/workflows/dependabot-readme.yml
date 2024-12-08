@@ -22,8 +22,8 @@ jobs:
         run: ./gradlew processReadMeTemplate
       - name: Update Changelog
         env:
-          PR_NAME: ${{ github.event.pull_request.html_url }}
-        run: echo '- '$PR_NAME >> changelog.md
+          PR_NAME: ${{ github.event.pull_request.title }}
+        run: echo '\n- '$PR_NAME >> changelog.md
       - name: Commit
         uses: EndBug/add-and-commit@v9
         with:
