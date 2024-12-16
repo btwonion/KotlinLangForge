@@ -1,3 +1,4 @@
 - update versioning to match the "language provider version" [**(#13)**](https://github.com/btwonion/KotlinLangForge/pull/13)
 - Bump org.jetbrains.kotlinx:atomicfu from 0.26.0 to 0.26.1
 - Bump org.jetbrains.kotlin.jvm from 2.0.21 to 2.1.0
+- Bump dev.kikugie.stonecutter from 0.5-beta.5 to 0.5
