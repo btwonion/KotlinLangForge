@@ -1,1 +1,2 @@
 - Bump dev.kikugie.stonecutter from 0.5-beta.5 to 0.5
+- Bump org.jetbrains.kotlinx:kotlinx-coroutines-jdk8 from 1.9.0 to 1.10.0
