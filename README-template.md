@@ -29,11 +29,11 @@ The "language provider version" is a version only provided by KotlinLangForge.
 This format is not used by Forge or NeoForge and only serves as a simple differentiation variable between the different
 language provider implementations over the course of the versions of Minecraft.
 
-| version of Minecraft | language provider version |
-|----------------------|---------------------------|
-| 1.16.5               | 1.0                       |
-| 1.17.1 - 1.20.4      | 2.0                       |
-| 1.20.5 - 1.21.x      | 3.0                       |
+| version of Minecraft | language provider version | supported loaders         |
+|----------------------|---------------------------|---------------------------|
+| 1.16.5               | 1.0                       | Forge                     |
+| 1.17.1 - 1.20.4      | 2.0                       | Forge, NeoForge           |
+| 1.20.5 - 1.21.x      | 3.0                       | NeoForge                  |
 
 **build.gradle.kts**
 
@@ -51,7 +51,7 @@ dependencies {
 
 To use the mod bus, just implement `dev.nyon.klf.MOD_BUS`.
 
-## Libraries
+## Included Libraries
 
 {inclusions}
 
