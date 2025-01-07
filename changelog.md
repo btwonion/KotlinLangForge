@@ -1,4 +1,3 @@
-- Bump org.jetbrains.kotlinx:kotlinx-coroutines-core from 1.10.0 to 1.10.1
 - Bump org.jetbrains.kotlinx:kotlinx-serialization-cbor from 1.7.3 to 1.8.0
 - Bump org.jetbrains.kotlinx:kotlinx-serialization-core from 1.7.3 to 1.8.0
 - Bump org.jetbrains.kotlinx:kotlinx-serialization-json from 1.7.3 to 1.8.0
