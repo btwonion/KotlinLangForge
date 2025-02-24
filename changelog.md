@@ -1,1 +1,1 @@
-- Bump org.jetbrains.kotlinx:kotlinx-datetime from 0.6.1 to 0.6.2
+- Bump org.jetbrains.kotlinx:kotlinx-datetime from 0.6.1 to 0.6.2- Bump com.gradleup.shadow from 9.0.0-beta8 to 9.0.0-beta9
