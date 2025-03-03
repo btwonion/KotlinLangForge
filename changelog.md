@@ -1,2 +1,2 @@
 - Bump org.jetbrains.kotlinx:kotlinx-io-bytestring from 0.6.0 to 0.7.0
-- Bump org.jetbrains.kotlinx:kotlinx-io-core from 0.6.0 to 0.7.0
+- Bump org.jetbrains.kotlinx:kotlinx-io-core from 0.6.0 to 0.7.0- Bump dev.kikugie.stonecutter from 0.5.1 to 0.5.2
