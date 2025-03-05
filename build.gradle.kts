@@ -132,7 +132,7 @@ tasks {
         archiveClassifier = "shadow"
         configurations = listOf(apiAndShadow)
 
-        class DontIncludeMcFilesTransformer : com.github.jengelman.gradle.plugins.shadow.transformers.Transformer {
+        class DontIncludeMcFilesTransformer : com.github.jengelman.gradle.plugins.shadow.transformers.ResourceTransformer {
             @Input
             @Optional
             val invalidEndings = listOf(
@@ -168,10 +168,6 @@ tasks {
             }
 
             override fun modifyOutputStream(os: ZipOutputStream, preserveFileTimestamps: Boolean) {}
-
-            override fun getName(): String {
-                return "DontIncludeMcFilesTransformer"
-            }
         }
 
         transform(DontIncludeMcFilesTransformer())
