@@ -132,7 +132,7 @@ tasks {
         archiveClassifier = "shadow"
         configurations = listOf(apiAndShadow)
 
-        class DontIncludeMcFilesTransformer : com.github.jengelman.gradle.plugins.shadow.transformers.Transformer {
+        class DontIncludeMcFilesTransformer : com.github.jengelman.gradle.plugins.shadow.transformers.ResourceTransformer {
             @Input
             @Optional
             val invalidEndings = listOf(
