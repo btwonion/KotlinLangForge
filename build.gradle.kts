@@ -168,10 +168,6 @@ tasks {
             }
 
             override fun modifyOutputStream(os: ZipOutputStream, preserveFileTimestamps: Boolean) {}
-
-            override fun getName(): String {
-                return "DontIncludeMcFilesTransformer"
-            }
         }
 
         transform(DontIncludeMcFilesTransformer())
