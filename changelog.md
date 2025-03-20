@@ -2,3 +2,4 @@
 - Bump org.jetbrains.kotlinx:kotlinx-io-core from 0.6.0 to 0.7.0- Bump dev.kikugie.stonecutter from 0.5.1 to 0.5.2
 - Bump com.gradleup.shadow from 9.0.0-beta9 to 9.0.0-beta10
 - Bump com.gradleup.shadow from 9.0.0-beta10 to 9.0.0-beta11
+- Bump org.jetbrains.kotlin.jvm from 2.1.10 to 2.1.20

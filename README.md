@@ -53,10 +53,10 @@ To use the mod bus, just implement `dev.nyon.klf.MOD_BUS`.
 
 ## Included Libraries
 
-- org.jetbrains.kotlin:kotlin-stdlib:2.1.10
-- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.10
-- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.10
-- org.jetbrains.kotlin:kotlin-reflect:2.1.10
+- org.jetbrains.kotlin:kotlin-stdlib:2.1.20
+- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20
+- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20
+- org.jetbrains.kotlin:kotlin-reflect:2.1.20
 - org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.0
 - org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0
 - org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.8.0
