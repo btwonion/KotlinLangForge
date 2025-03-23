@@ -21,7 +21,7 @@ Just make sure your `@Mod` class is either an object or a class with a public
 and empty constructor.
 
 If you want to implement the libraries in your mod, import the following dependency,
-matching the language loader version of your version of Minecraft, your loader and the (latest) version of Kotlin.
+matching the language provider version, your loader and the (latest) version of Kotlin.
 
 **Versioning**
 
