@@ -1,1 +1,2 @@
 - Bump org.jetbrains.kotlin.jvm from 2.1.10 to 2.1.20
+- Bump com.gradleup.shadow from 9.0.0-beta11 to 9.0.0-beta12
