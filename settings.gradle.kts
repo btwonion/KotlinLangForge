@@ -19,7 +19,7 @@ plugins {
 buildscript {
     repositories { mavenCentral() }
     dependencies {
-        classpath("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+        classpath("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
     }
 }
 
