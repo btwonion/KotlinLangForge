@@ -2,3 +2,4 @@
 - Bump com.gradleup.shadow from 9.0.0-beta11 to 9.0.0-beta12
 - Bump org.jetbrains.kotlinx:kotlinx-serialization-core from 1.8.0 to 1.8.1
 - Bump org.jetbrains.kotlinx:kotlinx-serialization-cbor from 1.8.0 to 1.8.1
+- Bump org.jetbrains.kotlinx:kotlinx-serialization-json from 1.8.0 to 1.8.1
