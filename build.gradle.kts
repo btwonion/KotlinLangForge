@@ -69,7 +69,7 @@ val inclusions = listOf(
     "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1",
     "org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.8.1",
     "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1",
-    "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.10.1",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.10.2",
     "org.jetbrains.kotlinx:kotlinx-datetime:0.6.2",
     "org.jetbrains.kotlinx:kotlinx-io-core:0.7.0",
     "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.7.0",
