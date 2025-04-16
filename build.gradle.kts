@@ -208,6 +208,12 @@ publishMods {
         minecraftVersions.addAll(supportedMcVersions)
     }
 
+    curseforge {
+        projectId = "1244682"
+        accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
+        minecraftVersions.addAll(supportedMcVersions)
+    }
+
     github {
         repository = githubRepo
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
