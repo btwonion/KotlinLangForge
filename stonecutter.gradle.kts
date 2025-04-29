@@ -1,7 +1,5 @@
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.*
-import org.gradle.configurationcache.extensions.capitalized
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -14,13 +12,8 @@ plugins {
 stonecutter active "3.0-neoforge" /* [SC] DO NOT EDIT */
 
 stonecutter parameters {
-    val platform = node!!.property("loom.platform")
-    val platforms = listOf("forge", "neoforge").map { it to (platform == it) }
-
-    val lPVersion = node!!.name.split("-")[0]
+    val lPVersion = metadata.project.split("-")[0]
     dependency("lp", lPVersion)
-
-    consts(platforms)
 }
 
 stonecutter registerChiseled tasks.register("buildAllVersions", stonecutter.chiseled) {
@@ -49,8 +42,8 @@ val slug = property("mod.slug").toString()
 val repo = property("mod.repo").toString()
 val avatar = property("mod.icon-url").toString()
 val color = property("mod.color").toString().toInt()
-val supportedLoaders = property("mod.supported-loaders").toString().split(',').map {
-    it.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+val supportedLoaders = property("mod.supported-loaders").toString().split(',').map { loader ->
+    loader.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 }
 tasks.register("postUpdate") {
     group = "mod"
@@ -61,28 +54,29 @@ tasks.register("postUpdate") {
     val roleId = providers.environmentVariable("DISCORD_ROLE_ID").orNull ?: return@register
     val changelogText = rootProject.file("changelog.md").readText()
 
-    val webhook = DiscordWebhook(
-        username = "${rootProject.name} Release Notifier", avatarUrl = avatar, embeds = listOf(
-            Embed(
-                title = "v$featureVersion of ${rootProject.name} released!",
-                description = "# Changelog\n$changelogText",
-                timestamp = Instant.now().toString(),
-                color = color,
-                fields = listOf(
-                    Field(
-                        "Supported versions", stonecutter.tree.nodes.map { it.property("vers.supportedMcVersions").toString().split(',') }
-                            .flatten().toSet().joinToString(), false
-                    ),
-                    Field(
-                        "Supported loaders", supportedLoaders.joinToString(), false
-                    ),
-                    Field("Modrinth", "https://modrinth.com/mod/$slug", true),
-                    Field("CurseForge", "https://www.curseforge.com/minecraft/mc-mods/kotlinlangforge", true),
-                    Field("GitHub", "https://github.com/$repo", true)
-                )
-            )
-        )
-    )
+    val webhook =
+        DiscordWebhook(
+            username = "${rootProject.name} Release Notifier",
+            avatarUrl = avatar,
+            embeds = listOf(
+                Embed(
+                    title = "v$featureVersion of ${rootProject.name} released!",
+                    description = "# Changelog\n$changelogText",
+                    timestamp = Instant.now().toString(),
+                    color = color,
+                    fields = listOf(
+                        Field(
+                            "Supported versions",
+                            stonecutter.tree.nodes.map {
+                                it.project.property("vers.supportedMcVersions").toString().split(',')
+                            }.flatten().toSet().joinToString(),
+                            false),
+                        Field(
+                            "Supported loaders", supportedLoaders.joinToString(), false
+                        ),
+                        Field("Modrinth", "https://modrinth.com/mod/$slug", true),
+                        Field("CurseForge", "https://www.curseforge.com/minecraft/mc-mods/kotlinlangforge", true),
+                        Field("GitHub", "https://github.com/$repo", true)))))
 
     @OptIn(ExperimentalSerializationApi::class)
     val embedsJson = buildJsonArray {
