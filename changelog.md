@@ -1,2 +1,3 @@
 - Bump org.jetbrains.kotlinx:kotlinx-coroutines-jdk8 from 1.10.1 to 1.10.2
 - Bump org.jetbrains.kotlinx:kotlinx-coroutines-core from 1.10.1 to 1.10.2
+- Bump dev.kikugie.stonecutter from 0.5.2 to 0.6
