@@ -2,3 +2,4 @@
 - Bump org.jetbrains.kotlinx:kotlinx-coroutines-core from 1.10.1 to 1.10.2
 - Bump dev.kikugie.stonecutter from 0.5.2 to 0.6
 - Bump com.gradleup.shadow from 9.0.0-beta12 to 9.0.0-beta13
+- Bump dev.kikugie.stonecutter from 0.5.2 to 0.6
