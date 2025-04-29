@@ -4,7 +4,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
 import net.fabricmc.loom.util.ModPlatform
 import org.apache.tools.zip.ZipOutputStream
-import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -31,6 +30,11 @@ val githubRepo = property("mod.repo").toString()
 
 base {
     archivesName.set(rootProject.name)
+}
+
+stonecutter {
+    listOf("forge", "neoforge").map { it to (loader.name.lowercase() == it) }
+        .forEach { (name, isCurrent) -> const(name, isCurrent) }
 }
 
 loom {
@@ -132,7 +136,8 @@ tasks {
         archiveClassifier = "shadow"
         configurations = listOf(apiAndShadow)
 
-        class DontIncludeMcFilesTransformer : com.github.jengelman.gradle.plugins.shadow.transformers.ResourceTransformer {
+        class DontIncludeMcFilesTransformer :
+            com.github.jengelman.gradle.plugins.shadow.transformers.ResourceTransformer {
             @Input
             @Optional
             val invalidEndings = listOf(
