@@ -3,3 +3,4 @@
 - Bump dev.kikugie.stonecutter from 0.5.2 to 0.6
 - Bump com.gradleup.shadow from 9.0.0-beta12 to 9.0.0-beta13
 - Bump dev.kikugie.stonecutter from 0.5.2 to 0.6
+- Bump org.jetbrains.kotlin.jvm from 2.1.20 to 2.1.21
