@@ -1,3 +1,6 @@
 - add mod metadata
 - Bump org.jetbrains.kotlinx:atomicfu from 0.27.0 to 0.28.0
-
+- Bump org.jetbrains.kotlin.jvm from 2.1.21 to 2.2.0
+- Bump org.jetbrains.kotlinx:kotlinx-io-bytestring from 0.7.0 to 0.8.0
+- Bump org.jetbrains.kotlinx:kotlinx-io-core from 0.7.0 to 0.8.0
+- Bump org.jetbrains.kotlinx:kotlinx-datetime from 0.6.2 to 0.7.0-0.6.x-compat
