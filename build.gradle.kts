@@ -75,8 +75,8 @@ val inclusions = listOf(
     "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2",
     "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.10.2",
     "org.jetbrains.kotlinx:kotlinx-datetime:0.7.0-0.6.x-compat",
-    "org.jetbrains.kotlinx:kotlinx-io-core:0.7.0",
-    "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.7.0",
+    "org.jetbrains.kotlinx:kotlinx-io-core:0.8.0",
+    "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.8.0",
     "org.jetbrains.kotlinx:atomicfu:0.28.0"
 )
 
@@ -97,6 +97,10 @@ val javaVersion =
     if (stonecutter.eval(mcVersion, ">=1.20.6")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
 val modName = property("mod.name").toString()
 val modId = property("mod.id").toString()
+val modDescription = property("mod.description").toString()
+val icon = property("mod.icon").toString()
+val slug = property("mod.slug").toString()
+val mcVersionRange = property("vers.mcVersionRange").toString()
 tasks {
     register("releaseMod") {
         group = "publishing"
@@ -130,6 +134,24 @@ tasks {
             "Automatic-Module-Name" to modId,
             "Implementation-Version" to majorVersion
         )
+    }
+
+    processResources {
+        val props: Map<String, String?> = mapOf(
+            "id" to modId,
+            "name" to modName,
+            "description" to modDescription,
+            "version" to project.version.toString(),
+            "repo" to githubRepo,
+            "icon" to icon,
+            "slug" to slug,
+            "mc" to mcVersionRange
+        )
+
+        props.forEach(inputs::property)
+
+        filesMatching(listOf("META-INF/mods.toml", "META-INF/neoforge.mods.toml")) { expand(props) }
+        exclude(if (loader == ModPlatform.NEOFORGE) "META-INF/mods.toml" else "META-INF/neoforge.mods.toml")
     }
 
     withType<ShadowJar> {
