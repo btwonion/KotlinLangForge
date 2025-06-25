@@ -5,10 +5,10 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]' 
-      && ${{ ! contains(github.event.pull_request.title, "dev.kikugie.stonecutter") }} 
-      && ${{ ! contains(github.event.pull_request.title, "com.gradleup.shadow") }}
-      && ${{ ! contains(github.event.pull_request.title, "me.modmuss50.mod-publish-plugin") }}
-      && ${{ ! contains(github.event.pull_request.title, "dev.architectury.loom") }}
+      && ${{ ! contains(github.event.pull_request.title, 'dev.kikugie.stonecutter') }} 
+      && ${{ ! contains(github.event.pull_request.title, 'com.gradleup.shadow') }}
+      && ${{ ! contains(github.event.pull_request.title, 'me.modmuss50.mod-publish-plugin') }}
+      && ${{ ! contains(github.event.pull_request.title, 'dev.architectury.loom') }}
     steps:
       - uses: actions/checkout@v4
         with:
