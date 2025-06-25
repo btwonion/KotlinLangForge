@@ -3,17 +3,19 @@ name: build-commit
 on:
   push:
     paths-ignore:
-      - "../../README-template.md"
+      - "README-template.md"
+      - "README.md"
       - "LICENSE"
       - ".gitignore"
-      - "changelog.md"
       - ".editorconfig"
       - "src/*/resources/lang/*"
   pull_request:
     paths-ignore:
-      - "../../README-template.md"
+      - "README-template.md"
+      - "README.md"
       - "LICENSE"
       - ".gitignore"
+      - "changelog.md"
       - ".editorconfig"
       - "src/*/resources/lang/*"
   workflow_dispatch:
