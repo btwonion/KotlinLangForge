@@ -1,0 +1,19 @@
+license = "GPLv3"
+issueTrackerURL = "https://github.com/${repo}/issues"
+
+[[mods]]
+modId = "${id}"
+version = "${version}"
+displayName = "${name}"
+displayURL = "https://modrinth.com/mod/${slug}"
+authors = "btwonion"
+description = '''
+${description}
+'''
+logoFile = "${icon}"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+versionRange = "${mc}"
+ordering = "NONE"
+side = "CLIENT"
