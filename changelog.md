@@ -4,3 +4,9 @@
 - Bump org.jetbrains.kotlinx:kotlinx-io-bytestring from 0.7.0 to 0.8.0
 - Bump org.jetbrains.kotlinx:kotlinx-io-core from 0.7.0 to 0.8.0
 - Bump org.jetbrains.kotlinx:kotlinx-datetime from 0.6.2 to 0.7.0-0.6.x-compat
+- drop support for 1.0 language provider
+- make errors more precise and now accept constructors with args:
+  - IEventBus
+  - ModContainer
+  - KotlinModContainer
+  - Dist

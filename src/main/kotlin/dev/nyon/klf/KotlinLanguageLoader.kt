@@ -6,7 +6,12 @@ import net.neoforged.neoforgespi.language.IModInfo
 import net.neoforged.neoforgespi.language.ModFileScanData
 /*? if lp: >=3.0 {*/
 import net.neoforged.fml.ModContainer
+import net.neoforged.fml.ModLoadingIssue
+import net.neoforged.neoforgespi.IIssueReporting
 import net.neoforged.neoforgespi.language.IModLanguageLoader
+import net.neoforged.neoforgespi.locating.IModFile
+import java.lang.annotation.ElementType
+
 /*?} else {*/
 /*import net.neoforged.neoforgespi.language.IModLanguageProvider.IModLanguageLoader
 *//*?}*/
@@ -32,21 +37,36 @@ class KotlinLanguageLoader : IModLanguageLoader {
     override fun loadMod(
         info: IModInfo, scanResults: ModFileScanData, layer: ModuleLayer
     ): ModContainer {
-        val modClassName = scanResults.annotations.find { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }?.annotatedClassName
-        val modClass = Class.forName(layer.findModule(info.owningFile.moduleName()).orElseThrow(), modClassName)
-        return KotlinModContainer(info, modClass)
+        val modClasses = scanResults.getAnnotatedBy(ModAnnotation::class.java, ElementType.TYPE)
+            .filter { data -> data.annotationData["value"] == info.modId }
+            .map { data -> data.clazz.className }
+            .toList()
+
+        return KotlinModContainer(info, modClasses, layer)
     }
+
+    override fun validate(file: IModFile, loadedContainers: Collection<ModContainer?>, reporter: IIssueReporting) {
+        val modIds = file.modInfos.mapNotNull { if (it.loader == this) it.modId else null }
+
+        file.scanResult.getAnnotatedBy(ModAnnotation::class.java, ElementType.TYPE)
+            .filter { !modIds.contains(it.annotationData["value"]) }
+            .forEach { data ->
+                val modId = data.annotationData["value"]
+                val entrypointClass = data.clazz.className
+                val issue = ModLoadingIssue.error("fml.modloadingissue.javafml.dangling_entrypoint", modId, entrypointClass, file.filePath).withAffectedModFile(file)
+                reporter.addIssue(issue)
+            }
+    }
+
     /*?} else {*/
     /*@Suppress("UNCHECKED_CAST")
     override fun <T : Any> loadMod(
-        info: IModInfo /^? if lp: =1.0 {^//^, modClassLoader: ClassLoader^//^?}^/, scanResults: ModFileScanData /^? if lp: >1.0 {^/, layer: ModuleLayer/^?}^/
+        info: IModInfo, scanResults: ModFileScanData, layer: ModuleLayer
     ): T {
-        val modClassName = scanResults.annotations.find { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }?.annotatedClassName
-        val modClass = Class.forName(modClassName)
-        return KotlinModContainer(info, modClass) as T
+        val modClasses = scanResults.annotations
+            .filter { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }
+            .map { it.clazz.className }
+        return KotlinModContainer(info, modClasses, layer) as T
     }
-*//*?}*/
+    *//*?}*/
 }
-
-val ModFileScanData.AnnotationData.annotatedClassName
-    get() = /*? if lp: >=2.0 {*/ clazz.className /*?} else {*/ /*classType.className *//*?}*/

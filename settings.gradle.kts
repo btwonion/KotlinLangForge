@@ -27,7 +27,6 @@ stonecutter {
     kotlinController = true
     centralScript = "build.gradle.kts"
     shared {
-        vers("1.0-forge", "1.16.5")
         vers("2.0-forge", "1.18.2")
         vers("2.0-neoforge", "1.20.4")
         vers("3.0-neoforge", "1.20.6")

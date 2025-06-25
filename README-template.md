@@ -17,13 +17,16 @@ loaderVersion = "[1,)"
 ```
 
 Now you can init your mod like any other.
-Just make sure your `@Mod` class is either an object or a class with a public
-and empty constructor.
+Just make sure your `@Mod` class is either an object or a class with a public constructor.
+The constructor can take the following four arguments (they should never duplicate):
 
-If you want to implement the libraries in your mod, import the following dependency, 
+- IEventBus
+- ModContainer
+- KotlinModContainer
+- Dist
+
+If you want to implement the libraries in your mod, import the following dependency,
 matching the language provider version, your loader and the (latest) version of Kotlin.
-
-
 
 **Versioning**
 
@@ -31,11 +34,11 @@ The "language provider version" is a version only provided by KotlinLangForge.
 This format is not used by Forge or NeoForge and only serves as a simple differentiation variable between the different
 language provider implementations over the course of the versions of Minecraft.
 
-| version of Minecraft | language provider version | supported loaders         |
-|----------------------|---------------------------|---------------------------|
-| 1.16.5               | 1.0                       | Forge                     |
-| 1.17.1 - 1.20.4      | 2.0                       | Forge, NeoForge           |
-| 1.20.5 - 1.21.x      | 3.0                       | NeoForge                  |
+| version of Minecraft | language provider version | supported loaders |
+|----------------------|---------------------------|-------------------|
+| 1.16.5               | 1.0                       | Forge             |
+| 1.17.1 - 1.20.4      | 2.0                       | Forge, NeoForge   |
+| 1.20.5 - 1.21.x      | 3.0                       | NeoForge          |
 
 **build.gradle.kts**
 
