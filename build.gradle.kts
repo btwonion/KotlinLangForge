@@ -77,7 +77,7 @@ val inclusions = listOf(
     "org.jetbrains.kotlinx:kotlinx-datetime:0.7.0-0.6.x-compat",
     "org.jetbrains.kotlinx:kotlinx-io-core:0.8.0",
     "org.jetbrains.kotlinx:kotlinx-io-bytestring:0.8.0",
-    "org.jetbrains.kotlinx:atomicfu:0.28.0"
+    "org.jetbrains.kotlinx:atomicfu:0.29.0"
 )
 
 dependencies {
