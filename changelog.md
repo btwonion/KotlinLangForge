@@ -9,4 +9,4 @@
   - IEventBus
   - ModContainer
   - KotlinModContainer
-  - Dist
+  - Dist- Bump org.jetbrains.kotlinx:atomicfu from 0.28.0 to 0.29.0
