@@ -1,1 +1,2 @@
 - Bump org.jetbrains.kotlinx:atomicfu from 0.28.0 to 0.29.0
+- Bump org.jetbrains.kotlinx:kotlinx-serialization-cbor from 1.8.1 to 1.9.0
