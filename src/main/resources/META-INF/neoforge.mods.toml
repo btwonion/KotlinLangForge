@@ -1,3 +1,5 @@
+modLoader="javafml"
+loaderVersion="[1,)"
 license = "GPLv3"
 issueTrackerURL = "https://github.com/${repo}/issues"
 
