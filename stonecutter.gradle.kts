@@ -76,7 +76,11 @@ tasks.register("postUpdate") {
                         ),
                         Field("Modrinth", "https://modrinth.com/mod/$slug", true),
                         Field("CurseForge", "https://www.curseforge.com/minecraft/mc-mods/kotlinlangforge", true),
-                        Field("GitHub", "https://github.com/$repo", true)))))
+                        Field("GitHub", "https://github.com/$repo", true)
+                    )
+                )
+            )
+        )
 
     @OptIn(ExperimentalSerializationApi::class)
     val embedsJson = buildJsonArray {
