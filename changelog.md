@@ -4,3 +4,4 @@
 - Bump org.jetbrains.kotlinx:kotlinx-serialization-cbor from 1.8.1 to 1.9.0
 - fix mod files, making the mod unusable on <1.21.5
 - Bump com.gradleup.shadow from 9.0.0-beta17 to 9.0.0-rc1
+- Bump org.jetbrains.kotlinx:kotlinx-datetime from 0.7.0-0.6.x-compat to 0.7.1-0.6.x-compat
