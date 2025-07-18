@@ -34,7 +34,7 @@ base {
 
 stonecutter {
     listOf("forge", "neoforge").map { it to (loader.name.lowercase() == it) }
-        .forEach { (name, isCurrent) -> const(name, isCurrent) }
+        .forEach { (name, isCurrent) -> constants[name] = isCurrent }
 }
 
 loom {

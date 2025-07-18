@@ -12,18 +12,8 @@ plugins {
 stonecutter active "3.0-neoforge" /* [SC] DO NOT EDIT */
 
 stonecutter parameters {
-    val lPVersion = metadata.project.split("-")[0]
-    dependency("lp", lPVersion)
-}
-
-stonecutter registerChiseled tasks.register("buildAllVersions", stonecutter.chiseled) {
-    group = "mod"
-    ofTask("build")
-}
-
-stonecutter registerChiseled tasks.register("releaseAllVersions", stonecutter.chiseled) {
-    group = "mod"
-    ofTask("releaseMod")
+    val lPVersion = node.metadata.project.split("-")[0]
+    dependencies["lp"] = lPVersion
 }
 
 private data class Field(val name: String, val value: String, val inline: Boolean)
