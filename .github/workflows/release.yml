@@ -23,9 +23,9 @@ jobs:
       - name: Build with Gradle
         uses: Wandalen/wretry.action@master
         with:
-          command: ./gradlew buildAllVersions --stacktrace
+          command: ./gradlew build --stacktrace
       - name: Release with Gradle
-        run: ./gradlew releaseAllVersions postUpdate --stacktrace
+        run: ./gradlew releaseMod postUpdate --stacktrace
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
