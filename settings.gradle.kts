@@ -13,7 +13,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.7.3"
+    id("dev.kikugie.stonecutter") version "0.7.4"
 }
 
 buildscript {
