@@ -88,7 +88,7 @@ dependencies {
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
     inclusions.forEach {
-        if (listOf("1.0", "2.0").contains(lPVersion)) apiAndShadow(it)
+        if (listOf("2.0").contains(lPVersion)) apiAndShadow(it)
         else api(include(it)!!)
     }
 }
@@ -130,7 +130,7 @@ tasks {
     withType<Jar> {
         manifest.attributes(
             "Manifest-Version" to "1.0",
-            "FMLModType" to if (listOf("1.0", "2.0").contains(lPVersion)) "LANGPROVIDER" else "LIBRARY",
+            "FMLModType" to if (listOf("2.0").contains(lPVersion)) "LANGPROVIDER" else "LIBRARY",
             "Automatic-Module-Name" to modId,
             "Implementation-Version" to majorVersion
         )
@@ -201,7 +201,7 @@ tasks {
     }
 
     remapJar {
-        if (listOf("1.0", "2.0").contains(lPVersion)) {
+        if (listOf("2.0").contains(lPVersion)) {
             dependsOn("shadowJar")
             val shadowJar = shadowJar.get()
             inputFile.set(shadowJar.archiveFile)

@@ -1,16 +1,11 @@
 package dev.nyon.klf
 
-/*? if lp: <=2.0 {*/
-/*/^? if forge {^/
-/^import net.minecraftforge.forgespi.language.ILifecycleEvent
-import net.minecraftforge.forgespi.language.IModLanguageProvider
-import net.minecraftforge.forgespi.language.ModFileScanData
-import java.util.function.Supplier
-^//^?} else {^/
-import net.neoforged.neoforgespi.language.IModLanguageProvider
-import net.neoforged.neoforgespi.language.ModFileScanData
-/^?}^/
+//? if lp: <=2.0 {
+/*import java.util.function.Supplier
 import java.util.function.Consumer
+
+typealias IModLanguageProvider = /^? if forge {^/ /^net.minecraftforge.forgespi.language.IModLanguageProvider ^//^?} else {^/ net.neoforged.neoforgespi.language.IModLanguageProvider /^?}^/
+typealias ModFileScanData = /^? if forge {^/ /^net.minecraftforge.forgespi.language.ModFileScanData ^//^?} else {^/ net.neoforged.neoforgespi.language.ModFileScanData /^?}^/
 
 class KotlinLanguageProvider : IModLanguageProvider {
     override fun name(): String {
@@ -31,5 +26,6 @@ class KotlinLanguageProvider : IModLanguageProvider {
     }
 
     //? if forge
-    /^override fun <R : ILifecycleEvent<R>> consumeLifecycleEvent(consumeEvent: Supplier<R>) {}^/
-}*//*?}*/
+    /^override fun <R : net.minecraftforge.forgespi.language.ILifecycleEvent<R>> consumeLifecycleEvent(consumeEvent: Supplier<R>) {}^/
+}*/
+//?}

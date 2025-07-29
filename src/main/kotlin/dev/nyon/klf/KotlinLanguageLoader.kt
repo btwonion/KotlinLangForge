@@ -1,31 +1,31 @@
 package dev.nyon.klf
 
-/*? if neoforge {*/
+//? if neoforge {
 import net.neoforged.fml.common.Mod
 import net.neoforged.neoforgespi.language.IModInfo
 import net.neoforged.neoforgespi.language.ModFileScanData
-/*? if lp: >=3.0 {*/
+//? if lp: >=3.0 {
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.ModLoadingIssue
 import net.neoforged.neoforgespi.IIssueReporting
 import net.neoforged.neoforgespi.language.IModLanguageLoader
 import net.neoforged.neoforgespi.locating.IModFile
 import java.lang.annotation.ElementType
-
-/*?} else {*/
+//?} else {
 /*import net.neoforged.neoforgespi.language.IModLanguageProvider.IModLanguageLoader
 *//*?}*/
-/*?} else {*/
+//?} else {
 /*import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.forgespi.language.IModInfo
 import net.minecraftforge.forgespi.language.IModLanguageProvider.IModLanguageLoader
 import net.minecraftforge.forgespi.language.ModFileScanData
-*//*?}*/
+*/
+//?}
 
 typealias ModAnnotation = Mod
 
 class KotlinLanguageLoader : IModLanguageLoader {
-    /*? if lp: >=3.0 {*/
+    //? if lp: >=3.0 {
     override fun name(): String {
         return "klf"
     }
@@ -58,7 +58,7 @@ class KotlinLanguageLoader : IModLanguageLoader {
             }
     }
 
-    /*?} else {*/
+    //?} else {
     /*@Suppress("UNCHECKED_CAST")
     override fun <T : Any> loadMod(
         info: IModInfo, scanResults: ModFileScanData, layer: ModuleLayer
@@ -68,5 +68,6 @@ class KotlinLanguageLoader : IModLanguageLoader {
             .map { it.clazz.className }
         return KotlinModContainer(info, modClasses, layer) as T
     }
-    *//*?}*/
+    */
+    //?}
 }

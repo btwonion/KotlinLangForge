@@ -1,7 +1,7 @@
 package dev.nyon.klf
 
 import java.util.function.Supplier
-/*? if lp: >=3.0 {*/
+//? if lp: >=3.0 {
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
@@ -10,8 +10,8 @@ import net.neoforged.fml.ModLoadingIssue
 import net.neoforged.fml.loading.FMLLoader
 import net.neoforged.neoforgespi.language.IModInfo
 import java.lang.reflect.InvocationTargetException
-/*?} else {*/
-/*/^? if forge {^/
+//?} else {
+/*//? if forge {
 /^import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.ModContainer
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.ModLoadingStage
 import net.minecraftforge.fml.loading.FMLLoader
 import net.minecraftforge.forgespi.language.IModInfo
 import java.lang.reflect.InvocationTargetException
-^//^?} else {^/
+^///?} else {
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
@@ -29,8 +29,8 @@ import net.neoforged.fml.ModLoadingStage
 import net.neoforged.fml.loading.FMLLoader
 import net.neoforged.neoforgespi.language.IModInfo
 import java.lang.reflect.InvocationTargetException
-/^?}^/
-*//*?}*/
+//?}
+*///?}
 
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")
 class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLayer: ModuleLayer) : ModContainer(info) {
@@ -62,7 +62,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
             contextExtensionField.set(this, legacyExtension)
         } catch (_: NoSuchFieldException) {}
     }
-    /*? if lp: <=2.0 {*/
+    //? if lp: <=2.0 {
     /*init {
         activityMap[ModLoadingStage.CONSTRUCT] = Runnable(::createMod)
     }
@@ -74,17 +74,18 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
     override fun getMod(): Any? {
         return modClasses?.firstOrNull()
     }
-    *//*?} else {*/
+    */
+    //?} else {
     override fun constructMod() {
         createMod()
     }
-    /*?}*/
+    //?}
 
-    /*? if neoforge {*/
+    //? if neoforge {
     override fun getEventBus(): IEventBus? {
         return MOD_BUS
     }
-    /*?}*/
+    //?}
 
     private fun createMod() {
         modClasses?.forEach { modClass ->
