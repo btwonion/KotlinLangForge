@@ -1,1 +1,1 @@
-- fix the mod file on Forge
+- fix bug, where ModContainers would overlap causing RegistrarEvents to fail

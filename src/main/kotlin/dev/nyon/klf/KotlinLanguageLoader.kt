@@ -19,8 +19,7 @@ import java.lang.annotation.ElementType
 import net.minecraftforge.forgespi.language.IModInfo
 import net.minecraftforge.forgespi.language.IModLanguageProvider.IModLanguageLoader
 import net.minecraftforge.forgespi.language.ModFileScanData
-*/
-//?}
+*///?}
 
 typealias ModAnnotation = Mod
 
@@ -68,6 +67,5 @@ class KotlinLanguageLoader : IModLanguageLoader {
             .map { it.clazz.className }
         return KotlinModContainer(info, modClasses, layer) as T
     }
-    */
-    //?}
+    *///?}
 }

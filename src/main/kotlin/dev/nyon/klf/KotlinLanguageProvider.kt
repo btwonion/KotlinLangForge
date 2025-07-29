@@ -27,5 +27,5 @@ class KotlinLanguageProvider : IModLanguageProvider {
 
     //? if forge
     /^override fun <R : net.minecraftforge.forgespi.language.ILifecycleEvent<R>> consumeLifecycleEvent(consumeEvent: Supplier<R>) {}^/
-}*/
-//?}
+}
+*///?}

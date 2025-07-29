@@ -1,30 +1,43 @@
 package dev.nyon.klf
 
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import org.apache.logging.log4j.Marker
+import org.apache.logging.log4j.MarkerManager
 import java.util.function.Supplier
 //? if lp: >=3.0 {
 import net.neoforged.api.distmarker.Dist
+import net.neoforged.bus.EventBusErrorMessage
+import net.neoforged.bus.api.BusBuilder
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.ModLoadingException
 import net.neoforged.fml.ModLoadingIssue
+import net.neoforged.fml.event.IModBusEvent
 import net.neoforged.fml.loading.FMLLoader
 import net.neoforged.neoforgespi.language.IModInfo
 import java.lang.reflect.InvocationTargetException
 //?} else {
 /*//? if forge {
 /^import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.eventbus.EventBusErrorMessage
+import net.minecraftforge.eventbus.api.BusBuilder
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.ModContainer
 import net.minecraftforge.fml.ModLoadingException
 import net.minecraftforge.fml.ModLoadingStage
+import net.minecraftforge.fml.event.IModBusEvent
 import net.minecraftforge.fml.loading.FMLLoader
 import net.minecraftforge.forgespi.language.IModInfo
 import java.lang.reflect.InvocationTargetException
 ^///?} else {
 import net.neoforged.api.distmarker.Dist
+import net.neoforged.bus.EventBusErrorMessage
+import net.neoforged.bus.api.BusBuilder
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.ModLoadingException
+import net.neoforged.fml.event.IModBusEvent
 import net.neoforged.fml.ModLoadingStage
 import net.neoforged.fml.loading.FMLLoader
 import net.neoforged.neoforgespi.language.IModInfo
@@ -34,26 +47,37 @@ import java.lang.reflect.InvocationTargetException
 
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")
 class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLayer: ModuleLayer) : ModContainer(info) {
-    private var modClasses: List<Class<*>>? = null
-    private var layer: Module? = null
+    companion object {
+        private val LOGGER: Logger = LogManager.getLogger()
+        private val LOADING: Marker = MarkerManager.getMarker("LOADING")
+    }
+
+    private var modClasses: List<Class<*>>
+    private var layer: Module
+    internal var context: KlfLoadingContext
+    internal var modBus: IEventBus
 
     init {
-        LOGGER.debug(LOADING, "Creating KotlinModContainer instance for {}", entrypoints)
+        LOGGER.debug(LOADING, "Creating KotlinModContainer instance with klf for {}", entrypoints)
+
+        context = KlfLoadingContext(this)
         layer = gameLayer.findModule(info.owningFile.moduleName()).orElseThrow()
-
-        try {
-            KlfLoadingContext.activeContainer = this
-
-            modClasses = entrypoints.map { entrypoint ->
-                tryAndThrowWithModLoadingException(entrypoint) {
-                    val cls = Class.forName(layer, entrypoint)
-                    if (cls == null) throw ClassNotFoundException("Class '$entrypoint' could not be found!")
-                    LOGGER.trace(LOADING, "Loaded modclass {} with {}", cls.name, cls.classLoader)
-                    cls
-                }
+        modBus = BusBuilder.builder()
+            .setExceptionHandler { _, event, listeners, busId, throwable ->
+                LOGGER.error(EventBusErrorMessage(event, busId, listeners, throwable))
             }
-        } finally {
-            KlfLoadingContext.activeContainer = null
+            .markerType(IModBusEvent::class.java)
+            //? if neoforge
+            .allowPerPhasePost()
+            .build()
+
+        modClasses = entrypoints.map { entrypoint ->
+            tryAndThrowWithModLoadingException(entrypoint) {
+                val cls = Class.forName(layer, entrypoint)
+                if (cls == null) throw ClassNotFoundException("Class '$entrypoint' could not be found!")
+                LOGGER.trace(LOADING, "Loaded modclass {} with {}", cls.name, cls.classLoader)
+                cls
+            }
         }
 
         try {
@@ -68,27 +92,27 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
     }
 
     override fun matches(mod: Any?): Boolean {
-        return modClasses?.firstOrNull() == mod
+        return modClasses.firstOrNull() == mod
     }
 
     override fun getMod(): Any? {
-        return modClasses?.firstOrNull()
+        return modClasses.firstOrNull()
     }
-    */
-    //?} else {
+    
+    *///?} else {
     override fun constructMod() {
         createMod()
     }
     //?}
 
     //? if neoforge {
-    override fun getEventBus(): IEventBus? {
-        return MOD_BUS
+    override fun getEventBus(): IEventBus {
+        return modBus
     }
     //?}
 
     private fun createMod() {
-        modClasses?.forEach { modClass ->
+        modClasses.forEach { modClass ->
             try {
                 val constructors = modClass.constructors
                 if (constructors.size == 0 && modClass.kotlin.objectInstance != null) return@forEach
@@ -96,7 +120,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
                 val constructor = constructors.first()
 
                 val allowedConstructorArguments = mapOf<Class<*>, Any>(
-                    IEventBus::class.java to MOD_BUS,
+                    IEventBus::class.java to modBus,
                     ModContainer::class.java to this,
                     KotlinModContainer::class.java to this,
                     Dist::class.java to FMLLoader.getDist()
