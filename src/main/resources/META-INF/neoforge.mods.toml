@@ -1,5 +1,6 @@
 modLoader="javafml"
 loaderVersion="[1,)"
+
 license = "GPLv3"
 issueTrackerURL = "https://github.com/${repo}/issues"
 
@@ -18,4 +19,4 @@ logoFile = "${icon}"
 modId = "minecraft"
 versionRange = "${mc}"
 ordering = "NONE"
-side = "CLIENT"
+side = "BOTH"
