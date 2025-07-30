@@ -1,13 +1,9 @@
 package dev.nyon.klf
 
-//? if neoforge {
-import net.neoforged.bus.api.IEventBus
-import net.neoforged.fml.ModLoadingContext
-//?} else {
-/*import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.fml.ModLoadingContext
-*///?}
+import dev.nyon.klf.mv.IEventBus
+import dev.nyon.klf.mv.ModLoadingContext
 
+@Suppress("unused")
 val MOD_BUS: IEventBus
     get() {
         return KlfLoadingContext.get().container.modBus
@@ -16,6 +12,7 @@ val MOD_BUS: IEventBus
 class KlfLoadingContext(internal val container: KotlinModContainer) {
 
     companion object {
+        @Suppress("DEPRECATION")
         fun get(): KlfLoadingContext {
             val active = /*? if lp: >2.0 {*/ModLoadingContext.get().activeContainer/*?} else {*/ /*ModLoadingContext.get().activeContainer *//*?}*/
             val kotlinModContainer = active as? KotlinModContainer ?:

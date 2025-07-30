@@ -1,61 +1,36 @@
 package dev.nyon.klf
 
+import dev.nyon.klf.mv.BusBuilder
+import dev.nyon.klf.mv.Dist
+import dev.nyon.klf.mv.EventBusErrorMessage
+import dev.nyon.klf.mv.FMLLoader
+import dev.nyon.klf.mv.IEventBus
+import dev.nyon.klf.mv.IModBusEvent
+import dev.nyon.klf.mv.IModInfo
+import dev.nyon.klf.mv.ModContainer
+import dev.nyon.klf.mv.ModFileScanData
+import dev.nyon.klf.mv.modLoadingException
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.apache.logging.log4j.Marker
 import org.apache.logging.log4j.MarkerManager
+import java.lang.reflect.InvocationTargetException
 import java.util.function.Supplier
-//? if lp: >=3.0 {
-import net.neoforged.api.distmarker.Dist
-import net.neoforged.bus.EventBusErrorMessage
-import net.neoforged.bus.api.BusBuilder
-import net.neoforged.bus.api.IEventBus
-import net.neoforged.fml.ModContainer
-import net.neoforged.fml.ModLoadingException
-import net.neoforged.fml.ModLoadingIssue
-import net.neoforged.fml.event.IModBusEvent
-import net.neoforged.fml.loading.FMLLoader
-import net.neoforged.neoforgespi.language.IModInfo
-import java.lang.reflect.InvocationTargetException
-//?} else {
-/*//? if forge {
-/^import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.eventbus.EventBusErrorMessage
-import net.minecraftforge.eventbus.api.BusBuilder
-import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.fml.ModContainer
-import net.minecraftforge.fml.ModLoadingException
-import net.minecraftforge.fml.ModLoadingStage
-import net.minecraftforge.fml.event.IModBusEvent
-import net.minecraftforge.fml.loading.FMLLoader
-import net.minecraftforge.forgespi.language.IModInfo
-import java.lang.reflect.InvocationTargetException
-^///?} else {
-import net.neoforged.api.distmarker.Dist
-import net.neoforged.bus.EventBusErrorMessage
-import net.neoforged.bus.api.BusBuilder
-import net.neoforged.bus.api.IEventBus
-import net.neoforged.fml.ModContainer
-import net.neoforged.fml.ModLoadingException
-import net.neoforged.fml.event.IModBusEvent
-import net.neoforged.fml.ModLoadingStage
-import net.neoforged.fml.loading.FMLLoader
-import net.neoforged.neoforgespi.language.IModInfo
-import java.lang.reflect.InvocationTargetException
-//?}
-*///?}
+
+//? lp: <=2.0
+/*import dev.nyon.klf.mv.ModLoadingStage*/
 
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")
-class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLayer: ModuleLayer) : ModContainer(info) {
+class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLayer: ModuleLayer, val scanResults: ModFileScanData) : ModContainer(info) {
     companion object {
-        private val LOGGER: Logger = LogManager.getLogger()
-        private val LOADING: Marker = MarkerManager.getMarker("LOADING")
+        internal val LOGGER: Logger = LogManager.getLogger()
+        internal val LOADING: Marker = MarkerManager.getMarker("LOADING")
     }
 
-    private var modClasses: List<Class<*>>
-    private var layer: Module
-    internal var context: KlfLoadingContext
-    internal var modBus: IEventBus
+    private val modClasses: List<Class<*>>
+    private val layer: Module
+    internal val context: KlfLoadingContext
+    internal val modBus: IEventBus
 
     init {
         LOGGER.debug(LOADING, "Creating KotlinModContainer instance with klf for {}", entrypoints)
@@ -72,7 +47,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
             .build()
 
         modClasses = entrypoints.map { entrypoint ->
-            tryAndThrowWithModLoadingException(entrypoint) {
+            tryAndThrowWithModLoadingException("Failed to load class {} $entrypoint.") {
                 val cls = Class.forName(layer, entrypoint)
                 if (cls == null) throw ClassNotFoundException("Class '$entrypoint' could not be found!")
                 LOGGER.trace(LOADING, "Loaded modclass {} with {}", cls.name, cls.classLoader)
@@ -113,40 +88,51 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
 
     private fun createMod() {
         modClasses.forEach { modClass ->
-            try {
-                val constructors = modClass.constructors
-                if (constructors.size == 0 && modClass.kotlin.objectInstance != null) return@forEach
-                if (constructors.size != 1) throw RuntimeException("Mod class $modClass must have exactly 1 public constructor, found ${constructors.size}.")
-                val constructor = constructors.first()
-
-                val allowedConstructorArguments = mapOf<Class<*>, Any>(
-                    IEventBus::class.java to modBus,
-                    ModContainer::class.java to this,
-                    KotlinModContainer::class.java to this,
-                    Dist::class.java to FMLLoader.getDist()
-                )
-
-                val constructorArgs = constructor.parameterTypes.map { type ->
-                    allowedConstructorArguments[type] ?: throw RuntimeException("Mod constructor has unsupported argument $type.")
-                }
-                constructor.newInstance(constructorArgs)
-
-                LOGGER.trace(LOADING, "Loaded mod instance {} of type {}", modId, modClass.name)
-            } catch (e: Throwable) {
-                LOGGER.error(LOADING, "Failed to create mod instance. ModID: {}, class {}", getModId(), modClass.getName(), if (e is InvocationTargetException) e.cause else e)
-                throw /*? if lp: <=2.0 {*/ /*ModLoadingException(info, ModLoadingStage.CONSTRUCT, "fml.modloading.failedtoloadmod", e, modClass)
-                    *//*?} else {*/ ModLoadingException(ModLoadingIssue.error("fml.modloadingissue.failedtoloadmod", e).withCause(e).withAffectedMod(modInfo)) /*?}*/
-            }
+            initModClass(modClass)
+            injectAutomaticEventSubscriber()
         }
     }
 
-    private fun <T> tryAndThrowWithModLoadingException(entrypoint: String, block: () -> T): T {
+    private fun initModClass(modClass: Class<*>) {
+        try {
+            val constructors = modClass.constructors
+            if (constructors.size == 0 && modClass.kotlin.objectInstance != null) return
+            if (constructors.size != 1) throw RuntimeException("Mod class $modClass must have exactly 1 public constructor, found ${constructors.size}.")
+            val constructor = constructors.first()
+
+            val allowedConstructorArguments = mapOf<Class<*>, Any>(
+                IEventBus::class.java to modBus,
+                ModContainer::class.java to this,
+                KotlinModContainer::class.java to this,
+                Dist::class.java to FMLLoader.getDist()
+            )
+
+            val constructorArgs = constructor.parameterTypes.map { type ->
+                allowedConstructorArguments[type] ?: throw RuntimeException("Mod constructor has unsupported argument $type.")
+            }
+            constructor.newInstance(constructorArgs)
+
+            LOGGER.trace(LOADING, "Loaded mod instance {} of type {}", modId, modClass.name)
+        } catch (e: Throwable) {
+            LOGGER.error(LOADING, "Failed to create mod instance. ModID: {}, class {}", getModId(), modClass.getName(), if (e is InvocationTargetException) e.cause else e)
+            throw modLoadingException(e, modInfo)
+        }
+    }
+
+    private fun injectAutomaticEventSubscriber() {
+        tryAndThrowWithModLoadingException("Failed to register automatic event subscribers of mod $modId.") {
+            LOGGER.trace(LOADING, "Injecting automatic event subscribers for $modId.")
+            AutomaticEventSubscriber.inject(this, scanResults, layer)
+            LOGGER.trace(LOADING, "Completed injecting automatic event subscribers for $modId.")
+        }
+    }
+
+    private fun <T> tryAndThrowWithModLoadingException(errorMessage: String, block: () -> T): T {
         try {
             return block()
         } catch (e: Throwable) {
-            LOGGER.error(LOADING, "Failed to load class {}", entrypoint, e)
-            throw /*? if lp: <=2.0 {*/ /*ModLoadingException(info, ModLoadingStage.CONSTRUCT, "fml.modloading.failedtoloadmod", e)
-            *//*?} else {*/ ModLoadingException(ModLoadingIssue.error("fml.modloadingissue.failedtoloadmod", e)) /*?}*/
+            LOGGER.error(LOADING, errorMessage, e)
+            throw modLoadingException(e, modInfo)
         }
     }
 }

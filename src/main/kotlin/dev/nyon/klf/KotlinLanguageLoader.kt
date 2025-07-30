@@ -1,27 +1,18 @@
 package dev.nyon.klf
 
-//? if neoforge {
-import net.neoforged.fml.common.Mod
-import net.neoforged.neoforgespi.language.IModInfo
-import net.neoforged.neoforgespi.language.ModFileScanData
+import dev.nyon.klf.mv.FMLLoader
+import dev.nyon.klf.mv.IModInfo
+import dev.nyon.klf.mv.IModLanguageLoader
+import dev.nyon.klf.mv.Mod
+import dev.nyon.klf.mv.ModContainer
+import dev.nyon.klf.mv.ModFileScanData
+
 //? if lp: >=3.0 {
-import net.neoforged.fml.ModContainer
 import net.neoforged.fml.ModLoadingIssue
 import net.neoforged.neoforgespi.IIssueReporting
-import net.neoforged.neoforgespi.language.IModLanguageLoader
 import net.neoforged.neoforgespi.locating.IModFile
 import java.lang.annotation.ElementType
-//?} else {
-/*import net.neoforged.neoforgespi.language.IModLanguageProvider.IModLanguageLoader
-*//*?}*/
-//?} else {
-/*import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.forgespi.language.IModInfo
-import net.minecraftforge.forgespi.language.IModLanguageProvider.IModLanguageLoader
-import net.minecraftforge.forgespi.language.ModFileScanData
-*///?}
-
-typealias ModAnnotation = Mod
+//?}
 
 class KotlinLanguageLoader : IModLanguageLoader {
     //? if lp: >=3.0 {
@@ -36,18 +27,20 @@ class KotlinLanguageLoader : IModLanguageLoader {
     override fun loadMod(
         info: IModInfo, scanResults: ModFileScanData, layer: ModuleLayer
     ): ModContainer {
-        val modClasses = scanResults.getAnnotatedBy(ModAnnotation::class.java, ElementType.TYPE)
+        val modClasses = scanResults.getAnnotatedBy(Mod::class.java, ElementType.TYPE)
             .filter { data -> data.annotationData["value"] == info.modId }
+            .filter { data -> AutomaticEventSubscriber.getSides(data.annotationData["dist"]).contains(FMLLoader.getDist()) }
+            .sorted(Comparator.comparingInt { data -> -AutomaticEventSubscriber.getSides(data.annotationData["dist"]).size })
             .map { data -> data.clazz.className }
             .toList()
 
-        return KotlinModContainer(info, modClasses, layer)
+        return KotlinModContainer(info, modClasses, layer, scanResults)
     }
 
     override fun validate(file: IModFile, loadedContainers: Collection<ModContainer?>, reporter: IIssueReporting) {
         val modIds = file.modInfos.mapNotNull { if (it.loader == this) it.modId else null }
 
-        file.scanResult.getAnnotatedBy(ModAnnotation::class.java, ElementType.TYPE)
+        file.scanResult.getAnnotatedBy(Mod::class.java, ElementType.TYPE)
             .filter { !modIds.contains(it.annotationData["value"]) }
             .forEach { data ->
                 val modId = data.annotationData["value"]
@@ -63,9 +56,9 @@ class KotlinLanguageLoader : IModLanguageLoader {
         info: IModInfo, scanResults: ModFileScanData, layer: ModuleLayer
     ): T {
         val modClasses = scanResults.annotations
-            .filter { it.annotationType.className == ModAnnotation::class.qualifiedName && it.annotationData["value"] == info.modId }
+            .filter { it.annotationType.className == Mod::class.qualifiedName && it.annotationData["value"] == info.modId }
             .map { it.clazz.className }
-        return KotlinModContainer(info, modClasses, layer) as T
+        return KotlinModContainer(info, modClasses, layer, scanResults) as T
     }
     *///?}
 }
