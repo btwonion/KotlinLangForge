@@ -32,11 +32,6 @@ base {
     archivesName.set(rootProject.name)
 }
 
-stonecutter {
-    listOf("forge", "neoforge").map { it to (loader.name.lowercase() == it) }
-        .forEach { (name, isCurrent) -> constants[name] = isCurrent }
-}
-
 loom {
     if (stonecutter.current.isActive) {
         runConfigs.all {

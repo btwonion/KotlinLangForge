@@ -12,8 +12,14 @@ plugins {
 stonecutter active "3.0-neoforge" /* [SC] DO NOT EDIT */
 
 stonecutter parameters {
-    val lPVersion = node.metadata.project.split("-")[0]
+    val split = node.metadata.project.split("-")
+    val lPVersion = split[0]
     dependencies["lp"] = lPVersion
+
+    val loader = split[1]
+    listOf("forge", "neoforge").forEach {
+        constants[it] = loader == it
+    }
 }
 
 private data class Field(val name: String, val value: String, val inline: Boolean)
