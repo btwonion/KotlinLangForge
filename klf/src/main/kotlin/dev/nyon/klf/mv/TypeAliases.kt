@@ -1,7 +1,7 @@
 package dev.nyon.klf.mv
 
-internal typealias Event = /*? if forge {*/  /*net.minecraftforge.eventbus.api.Event  *//*?} else {*/ net.neoforged.bus.api.Event /*?}*/
 internal typealias EventBusErrorMessage = /*? if forge {*/  /*net.minecraftforge.eventbus.EventBusErrorMessage  *//*?} else {*/ net.neoforged.bus.EventBusErrorMessage /*?}*/
+internal typealias Event = /*? if forge {*/  /*net.minecraftforge.eventbus.api.Event  *//*?} else {*/ net.neoforged.bus.api.Event /*?}*/
 internal typealias SubscribeEvent = /*? if forge {*/  /*net.minecraftforge.eventbus.api.SubscribeEvent  *//*?} else {*/ net.neoforged.bus.api.SubscribeEvent /*?}*/
 internal typealias BusBuilder = /*? if forge {*/  /*net.minecraftforge.eventbus.api.BusBuilder  *//*?} else {*/ net.neoforged.bus.api.BusBuilder /*?}*/
 internal typealias IEventBus = /*? if forge {*/  /*net.minecraftforge.eventbus.api.IEventBus  *//*?} else {*/ net.neoforged.bus.api.IEventBus /*?}*/

@@ -6,8 +6,8 @@ import net.neoforged.fml.ModLoadingIssue
 //?}
 
 //? if lp: <=2.0 {
-/*
-import org.objectweb.asm.Type
+
+/*import org.objectweb.asm.Type
 import java.lang.annotation.ElementType
 import java.util.stream.Stream
 

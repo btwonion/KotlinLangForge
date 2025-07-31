@@ -1,15 +1,6 @@
 package dev.nyon.klf
 
-import dev.nyon.klf.mv.BusBuilder
-import dev.nyon.klf.mv.Dist
-import dev.nyon.klf.mv.EventBusErrorMessage
-import dev.nyon.klf.mv.FMLLoader
-import dev.nyon.klf.mv.IEventBus
-import dev.nyon.klf.mv.IModBusEvent
-import dev.nyon.klf.mv.IModInfo
-import dev.nyon.klf.mv.ModContainer
-import dev.nyon.klf.mv.ModFileScanData
-import dev.nyon.klf.mv.modLoadingException
+import dev.nyon.klf.mv.*
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.apache.logging.log4j.Marker
@@ -73,7 +64,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
     override fun getMod(): Any? {
         return modClasses.firstOrNull()
     }
-    
+
     *///?} else {
     override fun constructMod() {
         createMod()
@@ -85,6 +76,16 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
         return modBus
     }
     //?}
+
+    //? if forge {
+    /*override fun <T> acceptEvent(e: T?) where T : Event?, T : net.minecraftforge.fml.event.IModBusEvent? {
+        tryAndThrowWithModLoadingException("Caught exception during event $e dispatch for mod $modId.") {
+            LOGGER.trace(LOADING, "Firing event $e for mod $modId.")
+            modBus.post(e)
+            LOGGER.trace(LOADING, "Fired event $e for mod $modId.")
+        }
+    }
+    *///?}
 
     private fun createMod() {
         modClasses.forEach { modClass ->
@@ -110,7 +111,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
             val constructorArgs = constructor.parameterTypes.map { type ->
                 allowedConstructorArguments[type] ?: throw RuntimeException("Mod constructor has unsupported argument $type.")
             }
-            constructor.newInstance(constructorArgs)
+            constructor.newInstance(*constructorArgs.toTypedArray())
 
             LOGGER.trace(LOADING, "Loaded mod instance {} of type {}", modId, modClass.name)
         } catch (e: Throwable) {
