@@ -11,6 +11,17 @@ plugins {
 val loader = loom.platform.get()
 val mcVersion = property("vers.mcVersion").toString()
 
+loom {
+    if (stonecutter.current.isActive) {
+        runConfigs.all {
+            ideConfigGenerated(true)
+            runDir("../../run")
+        }
+    }
+
+    silentMojangMappingsLicense()
+}
+
 repositories {
     mavenCentral()
     maven("https://maven.quiltmc.org/repository/release/")
@@ -25,7 +36,7 @@ dependencies {
     if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
-    modImplementation(rootProject.project(":${project.name.dropLast(5)}"))
+    implementation(include(project(":klf:${project.name}"))!!)
 }
 
 val javaVersion =
