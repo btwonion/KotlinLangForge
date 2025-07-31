@@ -1,0 +1,35 @@
+modLoader = "klf"
+loaderVersion = "[1,)"
+license = "GPLv3"
+
+[[mods]]
+modId = "klftestwithemptyconstructor"
+version = "1.0.0"
+authors = "btwonion"
+description = '''Tests klf'''
+
+[[mods]]
+modId = "klftestwithfullconstructor"
+version = "1.0.0"
+authors = "btwonion"
+description = '''Tests klf'''
+
+[[mods]]
+modId = "klftestwithautoeventsubscriber"
+version = "1.0.0"
+authors = "btwonion"
+description = '''Tests klf'''
+
+[[dependencies.klftestwithemptyconstructor]]
+modId = "minecraft"
+mandatory = true
+versionRange = ">1.17.1"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.klftestwithfullconstructor]]
+modId = "minecraft"
+mandatory = true
+versionRange = ">1.17.1"
+ordering = "NONE"
+side = "BOTH"

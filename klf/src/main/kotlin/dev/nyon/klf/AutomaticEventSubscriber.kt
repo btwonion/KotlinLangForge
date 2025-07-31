@@ -2,21 +2,13 @@ package dev.nyon.klf
 
 import dev.nyon.klf.KotlinModContainer.Companion.LOADING
 import dev.nyon.klf.KotlinModContainer.Companion.LOGGER
-import dev.nyon.klf.mv.Dist
-import dev.nyon.klf.mv.EnumHolder
-import dev.nyon.klf.mv.Event
-import dev.nyon.klf.mv.EventBusSubscriber
-import dev.nyon.klf.mv.FMLEnvironment
-import dev.nyon.klf.mv.IModBusEvent
-import dev.nyon.klf.mv.Mod
-import dev.nyon.klf.mv.ModFileScanData
-import dev.nyon.klf.mv.SubscribeEvent
-import dev.nyon.klf.mv.gameBus
-//? if lp: <=2.0
-/*import dev.nyon.klf.mv.getAnnotatedBy*/
+import dev.nyon.klf.mv.*
 import java.lang.annotation.ElementType
+import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.*
+//? if neoforge
+import net.neoforged.bus.SubscribeEventListener
 
 object AutomaticEventSubscriber {
 
@@ -32,7 +24,7 @@ object AutomaticEventSubscriber {
         targets.forEach { data ->
             val sides = getSides(data.annotationData["value"])
             val modId = data.annotationData["modid"]?.toString() ?: modIds[data.clazz.className] ?: mod.modId
-            if (modId != mod.modId && !sides.contains(FMLEnvironment.dist)) return@forEach
+            if (modId != mod.modId || !sides.contains(FMLEnvironment.dist)) return@forEach
             LOGGER.debug(LOADING, "Scanning class ${data.clazz.className} for @SubscribeEvent-annotated methods.")
 
             try {
@@ -45,26 +37,45 @@ object AutomaticEventSubscriber {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun processClass(clazz: Class<*>, modContainer: KotlinModContainer) {
         clazz.declaredMethods.forEach { method ->
-            if (!method.isAnnotationPresent(SubscribeEvent::class.java)) return@forEach
-            if (!Modifier.isStatic(method.modifiers)) return@forEach
-            if (method.parameterCount != 1 || !Event::class.java.isAssignableFrom(method.parameterTypes[0]))
-                throw IllegalStateException("Method $method annotated with @SubscribeEvent must have only one parameter that is an Event subtype.")
-
+            val subscribeEventAnnotation = runCatching { method.getDeclaredAnnotation(SubscribeEvent::class.java) }.getOrNull()
+            val isObject = clazz.kotlin.objectInstance != null
+            if (!Modifier.isStatic(method.modifiers) && !isObject) return@forEach
             val eventType = method.parameterTypes[0]
+            if (method.parameterCount != 1 || !Event::class.java.isAssignableFrom(eventType)) return@forEach
+
+            eventType as? Class<Event>
+                ?: throw IllegalStateException("Argument of method $method annotated with @SubscribeEvent was not a subtype of Event.")
 
             if (IModBusEvent::class.java.isAssignableFrom(eventType)) {
                 val modBus = modContainer.modBus
                 LOGGER.debug(LOADING, "Subscribing method $method to the event bus of mod ${modContainer.modId}.")
-                modBus.register(method)
+                modBus.addListenerWithoutJvmStatic(subscribeEventAnnotation, method, clazz, eventType)
             } else {
                 LOGGER.debug(LOADING, "Subscribing method $method to the game event bus.")
-                gameBus.register(method)
+                gameBus.addListenerWithoutJvmStatic(subscribeEventAnnotation, method, clazz, eventType)
             }
         }
     }
 
+    private fun IEventBus.addListenerWithoutJvmStatic(
+        annotationData: SubscribeEvent?, method: Method, parentClass: Class<*>, eventType: Class<Event>
+    ) {
+        //? if neoforge {
+        val listener = SubscribeEventListener(parentClass.kotlin.objectInstance ?: parentClass, method/*? if lp: <=2.0 {*//*, false*//*?}*/).withoutCheck
+        if (annotationData == null) addListener(eventType, listener::invoke)
+        else addListener(annotationData.priority, annotationData.receiveCanceled, eventType, listener::invoke)
+        
+        //?} else {
+        /*addListener(annotationData?.priority ?: net.minecraftforge.eventbus.api.EventPriority.NORMAL, annotationData?.receiveCanceled ?: false, eventType) {
+            method.invoke(parentClass.kotlin.objectInstance ?: parentClass, it)
+        }
+        *///?}
+    }
+
+    @Suppress("UNCHECKED_CAST")
     internal fun getSides(data: Any?): EnumSet<Dist> {
         return if (data == null) EnumSet.allOf(Dist::class.java)
         else (data as MutableList<EnumHolder>).map { holder -> Dist.valueOf(holder.value) }

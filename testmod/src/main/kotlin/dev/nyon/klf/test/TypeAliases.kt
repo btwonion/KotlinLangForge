@@ -1,4 +1,4 @@
-package dev.nyon.klf.mv
+package dev.nyon.klf.test
 
 internal typealias Event = /*? if forge {*/  /*net.minecraftforge.eventbus.api.Event  *//*?} else {*/ net.neoforged.bus.api.Event /*?}*/
 internal typealias EventBusErrorMessage = /*? if forge {*/  /*net.minecraftforge.eventbus.EventBusErrorMessage  *//*?} else {*/ net.neoforged.bus.EventBusErrorMessage /*?}*/
@@ -23,3 +23,8 @@ internal typealias ModFileScanData = /*? if forge {*/  /*net.minecraftforge.forg
 internal typealias AnnotationData = /*? if forge {*/  /*net.minecraftforge.forgespi.language.ModFileScanData.AnnotationData  *//*?} else {*/ net.neoforged.neoforgespi.language.ModFileScanData.AnnotationData /*?}*/
 internal typealias IModInfo = /*? if forge {*/  /*net.minecraftforge.forgespi.language.IModInfo  *//*?} else {*/ net.neoforged.neoforgespi.language.IModInfo /*?}*/
 internal typealias IModLanguageLoader = /*? if forge {*/  /*net.minecraftforge.forgespi.language.IModLanguageProvider.IModLanguageLoader  *//*?} else if lp: >2.0 {*/ net.neoforged.neoforgespi.language.IModLanguageLoader /*?} else {*/ /*net.neoforged.neoforgespi.language.IModLanguageProvider.IModLanguageLoader *//*?}*/
+
+internal typealias FMLConstructModEvent = /*? if forge {*/  /*net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent *//*?} else {*/  net.neoforged.fml.event.lifecycle.FMLConstructModEvent /*?}*/
+internal typealias PlayerEvent = /*? if forge {*/  /*net.minecraftforge.event.entity.player.PlayerEvent *//*?} else {*/  net.neoforged.neoforge.event.entity.player.PlayerEvent /*?}*/
+internal typealias LoadFromFile = /*? if forge {*/  /*net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile *//*?} else {*/  net.neoforged.neoforge.event.entity.player.PlayerEvent.LoadFromFile /*?}*/
+internal typealias NewRegistryEvent = /*? if forge {*/  /*net.minecraftforge.registries.NewRegistryEvent *//*?} else {*/  net.neoforged.neoforge.registries.NewRegistryEvent /*?}*/

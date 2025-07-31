@@ -27,10 +27,13 @@ stonecutter {
     kotlinController = true
     centralScript = "build.gradle.kts"
 
-    create(rootProject) {
-        vers("2.0-forge", "1.18.2")
-        vers("2.0-neoforge", "1.20.4")
-        vers("3.0-neoforge", "1.20.6")
-        vcsVersion = "3.0-neoforge"
+    listOf("klf", "testmod").forEach { namespace ->
+        create(namespace) {
+            vers("2.0-forge", "1.18.2")
+            vers("2.0-neoforge", "1.20.4")
+            vers("3.0-neoforge", "1.20.6")
+
+            vcsVersion = "3.0-neoforge"
+        }
     }
 }
