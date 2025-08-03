@@ -153,6 +153,12 @@ tasks {
         archiveClassifier = "shadow"
         configurations = listOf(apiAndShadow)
 
+        relocate("kotlin", "dev.nyon.klf.libs.kotlin")
+        relocate("kotlinx", "dev.nyon.klf.libs.kotlinx")
+        relocate("_COROUTINE", "dev.nyon.klf.libs._COROUTINE")
+
+        mergeServiceFiles()
+
         class DontIncludeMcFilesTransformer :
             com.github.jengelman.gradle.plugins.shadow.transformers.ResourceTransformer {
             @Input
