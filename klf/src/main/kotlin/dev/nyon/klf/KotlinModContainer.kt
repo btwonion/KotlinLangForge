@@ -97,8 +97,8 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
     private fun initModClass(modClass: Class<*>) {
         try {
             val constructors = modClass.constructors
-            if (constructors.size == 0 && modClass.kotlin.objectInstance != null) return
-            if (constructors.size != 1) throw RuntimeException("Mod class $modClass must have exactly 1 public constructor, found ${constructors.size}.")
+            if (constructors.size == 0 && modClass.kotlin.objectInstance == null) return
+            if (constructors.size > 1) throw RuntimeException("Mod class $modClass must have exactly 1 public constructor, found ${constructors.size}.")
             val constructor = constructors.first()
 
             val allowedConstructorArguments = mapOf<Class<*>, Any>(
