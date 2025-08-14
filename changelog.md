@@ -1,1 +1,1 @@
-- fix issue with objects as constructor- Bump org.jetbrains.kotlin.jvm from 2.2.0 to 2.2.10
+- Bump org.jetbrains.kotlin.jvm from 2.2.0 to 2.2.10
