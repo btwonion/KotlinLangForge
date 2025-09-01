@@ -2,7 +2,7 @@
 kotlin = "2.2.10"
 mod-publish = "0.8.+"
 architectury-loom = "1.9-SNAPSHOT"
-shadow = "9.0.2"
+shadow = "9.1.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
