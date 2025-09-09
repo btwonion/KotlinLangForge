@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.2.10"
-mod-publish = "0.8.+"
+mod-publish = "1.0.+"
 architectury-loom = "1.9-SNAPSHOT"
 shadow = "9.1.0"
 
