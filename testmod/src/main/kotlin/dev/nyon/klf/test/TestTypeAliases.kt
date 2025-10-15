@@ -5,7 +5,7 @@ internal typealias EventBusErrorMessage = /*? if forge {*/  /*net.minecraftforge
 internal typealias SubscribeEvent = /*? if forge {*/  /*net.minecraftforge.eventbus.api.SubscribeEvent  *//*?} else {*/ net.neoforged.bus.api.SubscribeEvent /*?}*/
 internal typealias BusBuilder = /*? if forge {*/  /*net.minecraftforge.eventbus.api.BusBuilder  *//*?} else {*/ net.neoforged.bus.api.BusBuilder /*?}*/
 internal typealias IEventBus = /*? if forge {*/  /*net.minecraftforge.eventbus.api.IEventBus  *//*?} else {*/ net.neoforged.bus.api.IEventBus /*?}*/
-internal typealias Bindings = /*? if forge {*/  /*net.minecraftforge.fml.Bindings  *//*?} else {*/ net.neoforged.fml.Bindings /*?}*/
+internal typealias Bindings = /*? if forge {*/  /*net.minecraftforge.fml.Bindings  *//*?} else if lp: <=3.0 {*/ /*net.neoforged.fml.Bindings *//*?} else {*/ net.neoforged.neoforge.internal.NeoForgeBindings /*?}*/
 internal typealias ModContainer = /*? if forge {*/  /*net.minecraftforge.fml.ModContainer  *//*?} else {*/ net.neoforged.fml.ModContainer /*?}*/
 internal typealias ModLoadingContext = /*? if forge {*/  /*net.minecraftforge.fml.ModLoadingContext  *//*?} else {*/ net.neoforged.fml.ModLoadingContext /*?}*/
 internal typealias ModLoadingException = /*? if forge {*/  /*net.minecraftforge.fml.ModLoadingException  *//*?} else {*/ net.neoforged.fml.ModLoadingException /*?}*/
