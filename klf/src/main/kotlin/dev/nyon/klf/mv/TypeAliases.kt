@@ -5,7 +5,7 @@ internal typealias Event = /*? if forge {*/  /*net.minecraftforge.eventbus.api.E
 internal typealias SubscribeEvent = /*? if forge {*/  /*net.minecraftforge.eventbus.api.SubscribeEvent  *//*?} else {*/ net.neoforged.bus.api.SubscribeEvent /*?}*/
 internal typealias BusBuilder = /*? if forge {*/  /*net.minecraftforge.eventbus.api.BusBuilder  *//*?} else {*/ net.neoforged.bus.api.BusBuilder /*?}*/
 internal typealias IEventBus = /*? if forge {*/  /*net.minecraftforge.eventbus.api.IEventBus  *//*?} else {*/ net.neoforged.bus.api.IEventBus /*?}*/
-internal typealias Bindings = /*? if forge {*/  /*net.minecraftforge.fml.Bindings  *//*?} else {*/ net.neoforged.fml.Bindings /*?}*/
+internal typealias Bindings = /*? if forge {*/  /*net.minecraftforge.fml.Bindings  *//*?} else if lp: <=3.0 {*/ /*net.neoforged.fml.Bindings *//*?} else {*/ net.neoforged.neoforge.internal.NeoForgeBindings /*?}*/
 internal typealias ModContainer = /*? if forge {*/  /*net.minecraftforge.fml.ModContainer  *//*?} else {*/ net.neoforged.fml.ModContainer /*?}*/
 internal typealias ModLoadingContext = /*? if forge {*/  /*net.minecraftforge.fml.ModLoadingContext  *//*?} else {*/ net.neoforged.fml.ModLoadingContext /*?}*/
 internal typealias ModLoadingException = /*? if forge {*/  /*net.minecraftforge.fml.ModLoadingException  *//*?} else {*/ net.neoforged.fml.ModLoadingException /*?}*/
@@ -22,4 +22,5 @@ internal typealias Dist = /*? if forge {*/  /*net.minecraftforge.api.distmarker.
 internal typealias ModFileScanData = /*? if forge {*/  /*net.minecraftforge.forgespi.language.ModFileScanData  *//*?} else {*/ net.neoforged.neoforgespi.language.ModFileScanData /*?}*/
 internal typealias AnnotationData = /*? if forge {*/  /*net.minecraftforge.forgespi.language.ModFileScanData.AnnotationData  *//*?} else {*/ net.neoforged.neoforgespi.language.ModFileScanData.AnnotationData /*?}*/
 internal typealias IModInfo = /*? if forge {*/  /*net.minecraftforge.forgespi.language.IModInfo  *//*?} else {*/ net.neoforged.neoforgespi.language.IModInfo /*?}*/
+internal typealias IModFileInfo = /*? if forge {*/  /*net.minecraftforge.forgespi.language.IModFileInfo  *//*?} else {*/ net.neoforged.neoforgespi.language.IModFileInfo /*?}*/
 internal typealias IModLanguageLoader = /*? if forge {*/  /*net.minecraftforge.forgespi.language.IModLanguageProvider.IModLanguageLoader  *//*?} else if lp: >2.0 {*/ net.neoforged.neoforgespi.language.IModLanguageLoader /*?} else {*/ /*net.neoforged.neoforgespi.language.IModLanguageProvider.IModLanguageLoader *//*?}*/

@@ -1,1 +1,2 @@
-- Bump org.jetbrains.kotlin.jvm from 2.2.10 to 2.2.20
+- update to 1.21.9 and 1.21.10
+  - introduce lp: 3.1

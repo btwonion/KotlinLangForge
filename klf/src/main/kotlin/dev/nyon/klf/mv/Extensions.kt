@@ -1,12 +1,10 @@
 package dev.nyon.klf.mv
 
-
 //? if lp: >=3.0 {
 import net.neoforged.fml.ModLoadingIssue
 //?}
 
 //? if lp: <=2.0 {
-
 /*import org.objectweb.asm.Type
 import java.lang.annotation.ElementType
 import java.util.stream.Stream
@@ -17,11 +15,15 @@ internal fun ModFileScanData.getAnnotatedBy(clazz: Class<out Any>, elementType: 
 } *///?}
 
 internal val gameBus: IEventBus
-    get() {
-        return /*? if lp: <=2.0 {*/ /*Bindings.getForgeBus().get() *//*?} else {*/ Bindings.getGameBus() /*?}*/
-    }
+    get() = /*? if lp: <=2.0 {*/ /*Bindings.getForgeBus().get() *//*?} else if lp: <=3.0 {*/ /*Bindings.getGameBus() *//*?} else {*/ net.neoforged.neoforge.common.NeoForge.EVENT_BUS /*?}*/
 
 internal fun modLoadingException(e: Throwable, modInfo: IModInfo): ModLoadingException {
     return /*? if lp: <=2.0 {*/ /*ModLoadingException(modInfo, ModLoadingStage.CONSTRUCT, "fml.modloading.failedtoloadmod", e)
         *//*?} else {*/ ModLoadingException(ModLoadingIssue.error("fml.modloadingissue.failedtoloadmod", e).withCause(e).withAffectedMod(modInfo)) /*?}*/
 }
+
+internal val dist: Dist
+    get() = /*? if lp: <=3.0 {*/ /*FMLEnvironment.dist *//*?} else {*/ FMLLoader.getCurrent().dist /*?}*/
+
+internal val IModFileInfo.moduleName: String
+    get() = /*? if lp: <=3.0 {*/ /*this.moduleName() *//*?} else {*/ this.file.id /*?}*/

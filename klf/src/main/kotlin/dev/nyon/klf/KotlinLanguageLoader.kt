@@ -1,11 +1,11 @@
 package dev.nyon.klf
 
-import dev.nyon.klf.mv.FMLLoader
 import dev.nyon.klf.mv.IModInfo
 import dev.nyon.klf.mv.IModLanguageLoader
 import dev.nyon.klf.mv.Mod
 import dev.nyon.klf.mv.ModContainer
 import dev.nyon.klf.mv.ModFileScanData
+import dev.nyon.klf.mv.dist
 
 //? if lp: >=3.0 {
 import net.neoforged.fml.ModLoadingIssue
@@ -29,7 +29,7 @@ class KotlinLanguageLoader : IModLanguageLoader {
     ): ModContainer {
         val modClasses = scanResults.getAnnotatedBy(Mod::class.java, ElementType.TYPE)
             .filter { data -> data.annotationData["value"] == info.modId }
-            .filter { data -> AutomaticEventSubscriber.getSides(data.annotationData["dist"]).contains(FMLLoader.getDist()) }
+            .filter { data -> AutomaticEventSubscriber.getSides(data.annotationData["dist"]).contains(dist) }
             .sorted(Comparator.comparingInt { data -> -AutomaticEventSubscriber.getSides(data.annotationData["dist"]).size })
             .map { data -> data.clazz.className }
             .toList()

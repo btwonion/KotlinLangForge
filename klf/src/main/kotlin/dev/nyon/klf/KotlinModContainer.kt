@@ -8,7 +8,7 @@ import org.apache.logging.log4j.MarkerManager
 import java.lang.reflect.InvocationTargetException
 import java.util.function.Supplier
 
-//? lp: <=2.0
+//? if lp: <=2.0
 /*import dev.nyon.klf.mv.ModLoadingStage*/
 
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")
@@ -27,7 +27,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
         LOGGER.debug(LOADING, "Creating KotlinModContainer instance with klf for {}", entrypoints)
 
         context = KlfLoadingContext(this)
-        layer = gameLayer.findModule(info.owningFile.moduleName()).orElseThrow()
+        layer = gameLayer.findModule(info.owningFile.moduleName).orElseThrow()
         modBus = BusBuilder.builder()
             .setExceptionHandler { _, event, listeners, busId, throwable ->
                 LOGGER.error(EventBusErrorMessage(event, busId, listeners, throwable))
@@ -105,7 +105,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
                 IEventBus::class.java to modBus,
                 ModContainer::class.java to this,
                 KotlinModContainer::class.java to this,
-                Dist::class.java to FMLLoader.getDist()
+                Dist::class.java to dist
             )
 
             val constructorArgs = constructor.parameterTypes.map { type ->

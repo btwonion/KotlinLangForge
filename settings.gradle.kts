@@ -29,9 +29,10 @@ stonecutter {
 
     listOf("klf", "testmod").forEach { namespace ->
         create(namespace) {
-            vers("2.0-forge", "1.18.2")
-            vers("2.0-neoforge", "1.20.4")
-            vers("3.0-neoforge", "1.20.6")
+            version("2.0-forge", "1.18.2")
+            version("2.0-neoforge", "1.20.4")
+            version("3.0-neoforge", "1.20.6")
+            version("3.1-neoforge", "1.21.9")
 
             vcsVersion = "3.0-neoforge"
         }

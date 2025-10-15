@@ -109,7 +109,17 @@ tasks {
 
         val templateText = rootProject.file("README-template.md").readText()
         val inclusionsReplacement = inclusions.joinToString("\n- ", prefix = "- ")
-        rootProject.file("README.md").writeText(templateText.replace("{inclusions}", inclusionsReplacement))
+        val replacements = mapOf(
+            "{inclusions}" to inclusionsReplacement, "{version}" to majorVersion, "{kotlinVersion}" to kotlinVersion!!
+        )
+        val newText: String = templateText.run {
+            var processing = this@run
+            replacements.forEach { (key, value) ->
+                processing = processing.replace(key, value)
+            }
+            processing
+        }
+        rootProject.file("README.md").writeText(newText)
     }
 
     withType<JavaCompile> {

@@ -24,7 +24,7 @@ object AutomaticEventSubscriber {
         targets.forEach { data ->
             val sides = getSides(data.annotationData["value"])
             val modId = data.annotationData["modid"]?.toString() ?: modIds[data.clazz.className] ?: mod.modId
-            if (modId != mod.modId || !sides.contains(FMLEnvironment.dist)) return@forEach
+            if (modId != mod.modId || !sides.contains(dist)) return@forEach
             LOGGER.debug(LOADING, "Scanning class ${data.clazz.className} for @SubscribeEvent-annotated methods.")
 
             try {
