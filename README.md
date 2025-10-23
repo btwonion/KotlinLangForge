@@ -49,7 +49,7 @@ repositories {
 }
 
 dependencies {
-    modImplementation("dev.nyon:KotlinLangForge:2.10.6-2.2.20-$lpVersion+$loader")
+    modImplementation("dev.nyon:KotlinLangForge:2.10.6-2.2.21-$lpVersion+$loader")
 }
 ```
 
@@ -67,10 +67,10 @@ determines which event bus to use.
 
 ## Included Libraries
 
-- org.jetbrains.kotlin:kotlin-stdlib:2.2.20
-- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20
-- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.20
-- org.jetbrains.kotlin:kotlin-reflect:2.2.20
+- org.jetbrains.kotlin:kotlin-stdlib:2.2.21
+- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21
+- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.21
+- org.jetbrains.kotlin:kotlin-reflect:2.2.21
 - org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0
 - org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0
 - org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.9.0
