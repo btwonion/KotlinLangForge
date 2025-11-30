@@ -5,37 +5,18 @@ import cpw.mods.jarhandling.impl.Jar;
 import cpw.mods.jarhandling.impl.SimpleJarMetadata;
 import dev.nyon.klf.compat.kff.accessors.JarAccessor;
 import dev.nyon.klf.compat.kff.accessors.SimpleJarMetadataAccessor;
+import dev.nyon.klf.compat.kff.modloading.KlfModFileLocator;
 import net.minecraftforge.fml.loading.moddiscovery.ModFile;
 import net.minecraftforge.forgespi.locating.IModFile;
 import net.minecraftforge.forgespi.locating.IModLocator;
 import settingdust.preloading_tricks.api.PreloadingTricksCallback;
 import settingdust.preloading_tricks.api.PreloadingTricksModManager;
 import settingdust.preloading_tricks.lexforge.LexForgeModManager;
-import settingdust.preloading_tricks.lexforge.mod_candidate.DefinedModLocator;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PreloadingCallback implements PreloadingTricksCallback {
-
-    private Path klfFilePath = null;
-
-    @Override
-    public void onCollectModCandidates() {
-        try {
-            List<Path> paths = Files.list(Path.of("mods/"))
-                .filter(p-> p.toString().contains("KotlinLangForge"))
-                .toList();
-            klfFilePath = paths.get(0);
-            DefinedModLocator.definedCandidates.add(klfFilePath);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void onSetupMods() {
@@ -74,8 +55,8 @@ public class PreloadingCallback implements PreloadingTricksCallback {
     }
 
     private IModFile loadKlfFile() {
-        DefinedModLocator locator = new DefinedModLocator();
-        IModLocator.ModFileOrException modFileOrException = locator.scanMods().get(0);
+        KlfModFileLocator locator = new KlfModFileLocator();
+        IModLocator.ModFileOrException modFileOrException = locator.getKlfFile();
         if (modFileOrException.ex() != null) return null;
         return modFileOrException.file();
     }
