@@ -6,9 +6,13 @@ import net.lenni0451.reflect.stream.RStream;
 import net.lenni0451.reflect.stream.field.FieldWrapper;
 
 public class JarAccessor {
+    private static final Class<Jar> clazz = Jar.class;
+
+    private static final RStream stream = RStream.of(clazz);
+
+    private static final FieldWrapper metadataField = stream.fields().by("metadata");
+
     public static JarMetadata getMetadata(Jar jar) {
-        RStream rStream = RStream.of(Jar.class);
-        FieldWrapper metadataField = rStream.fields().by("metadata");
         return metadataField.get(jar);
     }
 }

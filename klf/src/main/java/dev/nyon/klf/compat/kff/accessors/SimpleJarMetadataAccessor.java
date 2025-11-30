@@ -16,8 +16,8 @@ public class SimpleJarMetadataAccessor {
     private static final FieldWrapper pkgsField = stream.fields().by("pkgs");
     private static final FieldWrapper providersField = stream.fields().by("providers");
 
-    public static void setPackages(SimpleJarMetadata metadata, Set<String> packages) {
-        pkgsField.set(metadata, packages);
+    public static void setPkgs(SimpleJarMetadata metadata, Set<String> pkgs) {
+        pkgsField.set(metadata, pkgs);
     }
 
     public static void setProviders(SimpleJarMetadata metadata, List<SecureJar.Provider> providers) {
