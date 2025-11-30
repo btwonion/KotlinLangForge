@@ -49,6 +49,14 @@ repositories {
     maven("https://maven.quiltmc.org/repository/release/")
     maven("https://maven.neoforged.net/releases/")
     maven("https://maven.minecraftforge.net/")
+    exclusiveContent {
+        forRepository {
+            maven("https://api.modrinth.com/maven")
+        }
+        filter {
+            includeGroup("maven.modrinth")
+        }
+    }
 }
 
 val apiAndShadow: Configuration by configurations.creating {
@@ -79,7 +87,11 @@ dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.officialMojangMappings())
 
-    if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
+    if (loader == ModPlatform.FORGE) {
+        "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
+        include(implementation("net.lenni0451:Reflect:1.5.0")!!)
+        implementation("maven.modrinth:preloading-tricks:2.7.1")
+    }
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
     inclusions.forEach {
