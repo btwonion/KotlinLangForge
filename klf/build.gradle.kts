@@ -49,14 +49,6 @@ repositories {
     maven("https://maven.quiltmc.org/repository/release/")
     maven("https://maven.neoforged.net/releases/")
     maven("https://maven.minecraftforge.net/")
-    exclusiveContent {
-        forRepository {
-            maven("https://api.modrinth.com/maven")
-        }
-        filter {
-            includeGroup("maven.modrinth")
-        }
-    }
 }
 
 val apiAndShadow: Configuration by configurations.creating {
@@ -89,8 +81,7 @@ dependencies {
 
     if (loader == ModPlatform.FORGE) {
         "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
-        include(implementation("net.lenni0451:Reflect:1.5.0")!!)
-        implementation("maven.modrinth:preloading-tricks:2.7.1")
+        evaluationDependsOn(":kff-compat")
     }
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
@@ -234,10 +225,11 @@ val changelogText = buildString {
 
 val supportedMcVersions: List<String> =
     property("vers.supportedMcVersions")!!.toString().split(',').map(String::trim).filter(String::isNotEmpty)
-
+val transformerJar = project(":kff-compat").tasks.jar.flatMap { it.archiveFile }
 publishMods {
     displayName = "v${project.version}"
-    file = tasks.remapJar.get().archiveFile
+    file = if (loader == ModPlatform.FORGE) transformerJar
+    else tasks.remapJar.get().archiveFile
     changelog = changelogText
     type = if (beta != 0) BETA else STABLE
     when (loader) {

@@ -1,6 +1,6 @@
 package dev.nyon.klf.compat.kff.accessors;
-/*? if forge {*/
-/*import cpw.mods.jarhandling.SecureJar;
+
+import cpw.mods.jarhandling.SecureJar;
 import cpw.mods.jarhandling.impl.SimpleJarMetadata;
 import net.lenni0451.reflect.stream.RStream;
 import net.lenni0451.reflect.stream.field.FieldWrapper;
@@ -24,4 +24,3 @@ public class SimpleJarMetadataAccessor {
         providersField.set(metadata, providers);
     }
 }
-*//*?}*/

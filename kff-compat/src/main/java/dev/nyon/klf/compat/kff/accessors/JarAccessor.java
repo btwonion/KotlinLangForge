@@ -1,6 +1,6 @@
 package dev.nyon.klf.compat.kff.accessors;
-/*? if forge {*/
-/*import cpw.mods.jarhandling.JarMetadata;
+
+import cpw.mods.jarhandling.JarMetadata;
 import cpw.mods.jarhandling.impl.Jar;
 import net.lenni0451.reflect.stream.RStream;
 import net.lenni0451.reflect.stream.field.FieldWrapper;
@@ -16,4 +16,3 @@ public class JarAccessor {
         return metadataField.get(jar);
     }
 }
-*//*?}*/

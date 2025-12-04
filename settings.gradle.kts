@@ -38,3 +38,4 @@ stonecutter {
         }
     }
 }
+include("kff-compat")
