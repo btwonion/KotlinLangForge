@@ -1,16 +1,21 @@
 @file:Suppress("SpellCheckingInspection")
 
+import net.fabricmc.loom.util.ModPlatform
+
 plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.architectury.loom)
 }
 
+val loader = loom.platform.get()
+
 base {
-    archivesName.set(rootProject.name + "-kff-compat")
+    archivesName.set(rootProject.name + "-kff-compat-" + project.name)
 }
 
 repositories {
     mavenCentral()
+    maven("https://maven.neoforged.net/releases/")
     maven("https://maven.minecraftforge.net/")
     exclusiveContent {
         forRepository {
@@ -23,10 +28,12 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.20.1")
+    minecraft("com.mojang:minecraft:${property("vers.mcVersion")}")
     mappings(loom.officialMojangMappings())
 
-    "forge"("net.minecraftforge:forge:1.20.1-47.4.4")
+    if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:${property("vers.mcVersion")}-${property("vers.deps.fml")}")
+    else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
+
     include(project(":klf:2.0-forge"))
     include(implementation("net.lenni0451:Reflect:1.5.0")!!)
     implementation("maven.modrinth:preloading-tricks:3.3.1")

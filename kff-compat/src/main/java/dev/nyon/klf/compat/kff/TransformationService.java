@@ -9,12 +9,17 @@ import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.IncompatibleEnvironmentException;
 import dev.nyon.klf.compat.kff.accessors.JarAccessor;
 import dev.nyon.klf.compat.kff.accessors.SimpleJarMetadataAccessor;
-import net.minecraftforge.fml.loading.moddiscovery.ModFile;
+//? if forge {
+/*import net.minecraftforge.fml.loading.moddiscovery.ModFile;
+import settingdust.preloading_tricks.lexforge.LexForgeModManager;*/
+//?} else {
+import net.neoforged.fml.loading.moddiscovery.ModFile;
+import settingdust.preloading_tricks.neoforge.modlauncher.NeoForgeModManager;
+//?}
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import settingdust.preloading_tricks.api.PreloadingTricksCallbacks;
-import settingdust.preloading_tricks.lexforge.LexForgeModManager;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -47,7 +52,7 @@ public class TransformationService implements ITransformationService {
         });
 
         PreloadingTricksCallbacks.SETUP_MODS.register(_manager -> {
-            LexForgeModManager modManager = (LexForgeModManager) _manager;
+            /*? if forge {*/ /*LexForgeModManager *//*?} else {*/ NeoForgeModManager /*?}*/ modManager = (/*? if forge {*/ /*LexForgeModManager *//*?} else {*/ NeoForgeModManager /*?}*/) _manager;
 
             ModFile kffFile = null;
             ModFile klfFile = null;

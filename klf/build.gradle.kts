@@ -92,7 +92,7 @@ dependencies {
 }
 
 val javaVersion =
-    if (stonecutter.eval(mcVersion, ">=1.20.6")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
+    if (stonecutter.eval(mcVersion, ">=1.20.6")) 21 else 17
 val modName = property("mod.name").toString()
 val modId = property("mod.id").toString()
 val modDescription = property("mod.description").toString()
@@ -225,10 +225,10 @@ val changelogText = buildString {
 
 val supportedMcVersions: List<String> =
     property("vers.supportedMcVersions")!!.toString().split(',').map(String::trim).filter(String::isNotEmpty)
-val transformerJar = project(":kff-compat").tasks.jar.flatMap { it.archiveFile }
+val transformerJar = if (lPVersion == "2.0") project(":kff-compat:${project.name}").tasks.jar.flatMap { it.archiveFile } else null
 publishMods {
     displayName = "v${project.version}"
-    file = if (loader == ModPlatform.FORGE) transformerJar
+    file = if (lPVersion == "2.0") transformerJar!!
     else tasks.remapJar.get().archiveFile
     changelog = changelogText
     type = if (beta != 0) BETA else STABLE
@@ -242,12 +242,14 @@ publishMods {
         projectId = "1vrSzlao"
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
+        if (lPVersion == "2.0") requires("preloading-tricks")
     }
 
     curseforge {
         projectId = "1244682"
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
+        if (lPVersion == "2.0") requires("preloading-tricks")
     }
 
     github {
