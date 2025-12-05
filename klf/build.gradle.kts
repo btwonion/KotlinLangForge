@@ -223,18 +223,21 @@ val changelogText = buildString {
     rootDir.resolve("changelog.md").readText().also(::append)
 }
 
+val hasCompatService
+    get() = loader == ModPlatform.FORGE
+
 val supportedMcVersions: List<String> =
     property("vers.supportedMcVersions")!!.toString().split(',').map(String::trim).filter(String::isNotEmpty)
-val transformerJar = if (lPVersion == "2.0") project(":kff-compat:${project.name}").tasks.jar.flatMap { it.archiveFile } else null
+val transformerJar = if (hasCompatService) project(":kff-compat:${project.name}").tasks.jar.flatMap { it.archiveFile } else null
 publishMods {
     displayName = "v${project.version}"
-    file = if (lPVersion == "2.0") transformerJar!!
+    file = if (hasCompatService) transformerJar!!
     else tasks.remapJar.get().archiveFile
     changelog = changelogText
     type = if (beta != 0) BETA else STABLE
     when (loader) {
-        ModPlatform.FORGE -> modLoaders.addAll("forge")
-        ModPlatform.NEOFORGE -> modLoaders.addAll("neoforge")
+        ModPlatform.FORGE -> modLoaders.add("forge")
+        ModPlatform.NEOFORGE -> modLoaders.add("neoforge")
         else -> {}
     }
 
@@ -242,14 +245,14 @@ publishMods {
         projectId = "1vrSzlao"
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
-        if (lPVersion == "2.0") requires("preloading-tricks")
+        if (hasCompatService) requires("preloading-tricks")
     }
 
     curseforge {
         projectId = "1244682"
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
-        if (lPVersion == "2.0") requires("preloading-tricks")
+        if (hasCompatService) requires("preloading-tricks")
     }
 
     github {
