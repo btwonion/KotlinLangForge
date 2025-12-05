@@ -40,8 +40,8 @@ stonecutter {
 
     create("kff-compat") {
         version("2.0-forge", "1.20.1")
-        version("2.0-neoforge", "1.20.1")
+        //version("2.0-neoforge", "1.20.1")
 
-        vcsVersion = "2.0-neoforge"
+        vcsVersion = "2.0-forge"
     }
 }

@@ -9,8 +9,15 @@ plugins {
 
 val loader = loom.platform.get()
 
+val beta: Int = property("mod.beta").toString().toInt()
+val majorVersion: String = property("mod.major-version").toString()
+val mcVersion = property("vers.mcVersion").toString() // Pattern is '2.0.0-beta1-k2.0.20-2.0+forge'
+val lPVersion = stonecutter.current.project.split("-")[0]
+val kotlinVersion = libs.versions.kotlin.orNull
+version = "$majorVersion${if (beta != 0) "-beta$beta" else ""}-k$kotlinVersion-$lPVersion+${loader.name.lowercase()}"
+
 base {
-    archivesName.set(rootProject.name + "-kff-compat-" + project.name)
+    archivesName.set("${rootProject.name}-kff-compat")
 }
 
 repositories {
@@ -34,7 +41,7 @@ dependencies {
     if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:${property("vers.mcVersion")}-${property("vers.deps.fml")}")
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
-    include(project(":klf:2.0-forge"))
+    include(project(":klf:${project.name.split(":").last()}"))
     include(implementation("net.lenni0451:Reflect:1.5.0")!!)
     implementation("maven.modrinth:preloading-tricks:3.3.1")
 }

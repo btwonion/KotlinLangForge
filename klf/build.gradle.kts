@@ -228,7 +228,7 @@ val hasCompatService
 
 val supportedMcVersions: List<String> =
     property("vers.supportedMcVersions")!!.toString().split(',').map(String::trim).filter(String::isNotEmpty)
-val transformerJar = if (hasCompatService) project(":kff-compat:${project.name}").tasks.jar.flatMap { it.archiveFile } else null
+val transformerJar = if (hasCompatService) project(":kff-compat:${project.name}").tasks.remapJar.flatMap { it.archiveFile } else null
 publishMods {
     displayName = "v${project.version}"
     file = if (hasCompatService) transformerJar!!

@@ -7,26 +7,24 @@ import cpw.mods.modlauncher.api.IEnvironment;
 import cpw.mods.modlauncher.api.ITransformationService;
 import cpw.mods.modlauncher.api.ITransformer;
 import cpw.mods.modlauncher.api.IncompatibleEnvironmentException;
+import cpw.mods.niofs.union.UnionPath;
 import dev.nyon.klf.compat.kff.accessors.JarAccessor;
 import dev.nyon.klf.compat.kff.accessors.SimpleJarMetadataAccessor;
+import settingdust.preloading_tricks.api.modlauncher.ModLauncherPreloadingCallbacks;
+import settingdust.preloading_tricks.lexforge.LexForgeModManager;
 //? if forge {
-/*import net.minecraftforge.fml.loading.moddiscovery.ModFile;
-import settingdust.preloading_tricks.lexforge.LexForgeModManager;*/
+import net.minecraftforge.fml.loading.moddiscovery.ModFile;
 //?} else {
-import net.neoforged.fml.loading.moddiscovery.ModFile;
-import settingdust.preloading_tricks.neoforge.modlauncher.NeoForgeModManager;
-//?}
+/*import net.neoforged.fml.loading.moddiscovery.ModFile;
+*///?}
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import settingdust.preloading_tricks.api.PreloadingTricksCallbacks;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,23 +34,24 @@ public class TransformationService implements ITransformationService {
     private final Logger LOGGER = LogManager.getLogger();
 
     public TransformationService() {
-        PreloadingTricksCallbacks.COLLECT_MOD_CANDIDATES.register(manager -> {
+        ModLauncherPreloadingCallbacks.COLLECT_ADDITIONAL_DEPENDENCY_SOURCES.register(manager -> {
             try {
-                var uris = getClass().getClassLoader()
-                    .getResources("META-INF/jars/");
-                for (Iterator<URL> it = uris.asIterator(); it.hasNext(); ) {
-                    URL url = it.next();
-                    Files.list(Path.of(url.toURI())).forEach(path -> {
-                        if (path.toString().contains("KotlinLangForge")) manager.add(path);
-                    });
-                }
-            } catch (IOException ignored) {} catch (URISyntaxException e) {
+                var selfPath =
+                    ((UnionPath) Path.of(
+                        TransformationService.class
+                            .getProtectionDomain()
+                            .getCodeSource()
+                            .getLocation()
+                            .toURI()))
+                        .getFileSystem().getPrimaryPath();
+                manager.add(selfPath, "magnetic_service");
+            } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
         });
 
         PreloadingTricksCallbacks.SETUP_MODS.register(_manager -> {
-            /*? if forge {*/ /*LexForgeModManager *//*?} else {*/ NeoForgeModManager /*?}*/ modManager = (/*? if forge {*/ /*LexForgeModManager *//*?} else {*/ NeoForgeModManager /*?}*/) _manager;
+            LexForgeModManager modManager = (LexForgeModManager) _manager;
 
             ModFile kffFile = null;
             ModFile klfFile = null;
