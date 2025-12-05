@@ -1,7 +1,7 @@
 plugins {
     id("dev.kikugie.stonecutter")
 }
-stonecutter active "3.1-neoforge"
+stonecutter active "2.0-neoforge"
 
 stonecutter parameters {
     val split = node.metadata.project.split("-")

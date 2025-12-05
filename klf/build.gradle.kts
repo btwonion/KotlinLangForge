@@ -79,7 +79,10 @@ dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.officialMojangMappings())
 
-    if (loader == ModPlatform.FORGE) "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
+    if (loader == ModPlatform.FORGE) {
+        "forge"("net.minecraftforge:forge:$mcVersion-${property("vers.deps.fml")}")
+        evaluationDependsOn(":kff-compat")
+    }
     else "neoForge"("net.neoforged:neoforge:${property("vers.deps.fml")}")
 
     inclusions.forEach {
@@ -89,7 +92,7 @@ dependencies {
 }
 
 val javaVersion =
-    if (stonecutter.eval(mcVersion, ">=1.20.6")) 21 else if (stonecutter.eval(mcVersion, ">1.16.5")) 17 else 8
+    if (stonecutter.eval(mcVersion, ">=1.20.6")) 21 else 17
 val modName = property("mod.name").toString()
 val modId = property("mod.id").toString()
 val modDescription = property("mod.description").toString()
@@ -220,17 +223,21 @@ val changelogText = buildString {
     rootDir.resolve("changelog.md").readText().also(::append)
 }
 
+val hasCompatService
+    get() = loader == ModPlatform.FORGE
+
 val supportedMcVersions: List<String> =
     property("vers.supportedMcVersions")!!.toString().split(',').map(String::trim).filter(String::isNotEmpty)
-
+val transformerJar = if (hasCompatService) project(":kff-compat:${project.name}").tasks.jar.flatMap { it.archiveFile } else null
 publishMods {
     displayName = "v${project.version}"
-    file = tasks.remapJar.get().archiveFile
+    file = if (hasCompatService) transformerJar!!
+    else tasks.remapJar.get().archiveFile
     changelog = changelogText
     type = if (beta != 0) BETA else STABLE
     when (loader) {
-        ModPlatform.FORGE -> modLoaders.addAll("forge")
-        ModPlatform.NEOFORGE -> modLoaders.addAll("neoforge")
+        ModPlatform.FORGE -> modLoaders.add("forge")
+        ModPlatform.NEOFORGE -> modLoaders.add("neoforge")
         else -> {}
     }
 
@@ -238,12 +245,14 @@ publishMods {
         projectId = "1vrSzlao"
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
+        if (hasCompatService) requires("preloading-tricks")
     }
 
     curseforge {
         projectId = "1244682"
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
+        if (hasCompatService) requires("preloading-tricks")
     }
 
     github {
