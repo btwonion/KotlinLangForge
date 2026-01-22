@@ -1,1 +1,2 @@
-- Bump org.jetbrains.kotlin.jvm from 2.2.21 to 2.3.0
+
+- Bump org.jetbrains.kotlinx:kotlinx-serialization-json from 1.8.1 to 1.10.0
