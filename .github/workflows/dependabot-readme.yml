@@ -9,6 +9,7 @@ jobs:
       && ! contains(github.event.pull_request.title, 'com.gradleup.shadow')
       && ! contains(github.event.pull_request.title, 'me.modmuss50.mod-publish-plugin')
       && ! contains(github.event.pull_request.title, 'dev.architectury.loom') }}
+      && ! contains(github.event.pull_request.title, 'gradle-wrapper') }}
     steps:
       - uses: actions/checkout@v4
         with:
