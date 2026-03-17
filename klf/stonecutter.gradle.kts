@@ -22,6 +22,13 @@ stonecutter parameters {
     }
 }
 
+buildscript {
+    repositories { mavenCentral() }
+    dependencies {
+        classpath("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
+    }
+}
+
 private data class Field(val name: String, val value: String, val inline: Boolean)
 
 private data class Embed(
