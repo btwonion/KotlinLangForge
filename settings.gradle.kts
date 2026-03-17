@@ -18,7 +18,6 @@ plugins {
 
 stonecutter {
     kotlinController = true
-    centralScript = "build.gradle.kts"
 
     listOf("klf", "testmod").forEach { namespace ->
         create(namespace) {
