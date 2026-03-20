@@ -39,7 +39,7 @@ language provider implementations over the course of the versions of Minecraft.
 | 1.16.5               | 1.0                       | Forge             |
 | 1.17.1 - 1.20.4      | 2.0                       | Forge, NeoForge   |
 | 1.20.5 - 1.21.8      | 3.0                       | NeoForge          |
-| 1.21.9 - 1.21.x      | 3.1                       | NeoForge          |
+| 1.21.9 - 26.1        | 3.1                       | NeoForge          |
 
 **build.gradle.kts**
 
