@@ -1,2 +1,3 @@
 - Bump org.jetbrains.kotlin.jvm from 2.3.10 to 2.3.20
 - Bump gradle-wrapper from 9.4.0 to 9.4.1
+- Bump org.jetbrains.kotlin.jvm from 2.3.20 to 2.3.21
