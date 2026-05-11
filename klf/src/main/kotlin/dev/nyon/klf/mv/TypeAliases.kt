@@ -10,7 +10,7 @@ internal typealias ModContainer = /*? if forge {*/  /*net.minecraftforge.fml.Mod
 internal typealias ModLoadingContext = /*? if forge {*/  /*net.minecraftforge.fml.ModLoadingContext  *//*?} else {*/ net.neoforged.fml.ModLoadingContext /*?}*/
 internal typealias ModLoadingException = /*? if forge {*/  /*net.minecraftforge.fml.ModLoadingException  *//*?} else {*/ net.neoforged.fml.ModLoadingException /*?}*/
 //? if lp: <=2.0 {
-/*internal typealias ModLoadingStage = /^? if forge {^/  /^net.minecraftforge.fml.ModLoadingStage  ^//^?} else {^/ net.neoforged.fml.ModLoadingStage /^?}^/
+/*internal typealias ModLoadingStage = /*? if forge {*/  /*net.minecraftforge.fml.ModLoadingStage  *//*?} else {*/ net.neoforged.fml.ModLoadingStage /*?}*/
 *///?}
 internal typealias EventBusSubscriber = /*? if forge {*/  /*net.minecraftforge.fml.common.Mod.EventBusSubscriber  *//*?} else if lp: >=3.0 {*/ net.neoforged.fml.common.EventBusSubscriber /*?} else {*/ /*net.neoforged.fml.common.Mod.EventBusSubscriber *//*?}*/
 internal typealias Mod = /*? if forge {*/  /*net.minecraftforge.fml.common.Mod  *//*?} else {*/ net.neoforged.fml.common.Mod /*?}*/

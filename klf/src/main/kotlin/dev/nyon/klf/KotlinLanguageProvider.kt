@@ -6,7 +6,7 @@ import dev.nyon.klf.mv.ModFileScanData
 import java.util.function.Supplier
 import java.util.function.Consumer
 
-typealias IModLanguageProvider = /^? if forge {^/ /^net.minecraftforge.forgespi.language.IModLanguageProvider ^//^?} else {^/ net.neoforged.neoforgespi.language.IModLanguageProvider /^?}^/
+typealias IModLanguageProvider = /*? if forge {*/ /*net.minecraftforge.forgespi.language.IModLanguageProvider *//*?} else {*/ net.neoforged.neoforgespi.language.IModLanguageProvider /*?}*/
 
 class KotlinLanguageProvider : IModLanguageProvider {
     override fun name(): String {
@@ -27,6 +27,6 @@ class KotlinLanguageProvider : IModLanguageProvider {
     }
 
     //? if forge
-    /^override fun <R : net.minecraftforge.forgespi.language.ILifecycleEvent<R>> consumeLifecycleEvent(consumeEvent: Supplier<R>) {}^/
+    /*override fun <R : net.minecraftforge.forgespi.language.ILifecycleEvent<R>> consumeLifecycleEvent(consumeEvent: Supplier<R>) {}*/
 }
 *///?}

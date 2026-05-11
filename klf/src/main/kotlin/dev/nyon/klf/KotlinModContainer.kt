@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException
 import java.util.function.Supplier
 
 //? if lp: <=2.0
-/*import dev.nyon.klf.mv.ModLoadingStage*/
+//import dev.nyon.klf.mv.ModLoadingStage
 
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")
 class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLayer: ModuleLayer, val scanResults: ModFileScanData) : ModContainer(info) {
