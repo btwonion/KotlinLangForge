@@ -49,7 +49,7 @@ repositories {
 }
 
 dependencies {
-    modImplementation("dev.nyon:KotlinLangForge:2.11.2-2.3.21-$lpVersion+$loader")
+    modImplementation("dev.nyon:KotlinLangForge:2.12.0-2.3.21-$lpVersion+$loader")
 }
 ```
 

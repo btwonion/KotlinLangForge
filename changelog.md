@@ -1,1 +1,1 @@
-- Bump org.jetbrains.kotlin.jvm from 2.3.20 to 2.3.21
+- Improve error messages when launching the game with a wrong version of the mod [**#112**](https://github.com/btwonion/KotlinLangForge/issues/112)
