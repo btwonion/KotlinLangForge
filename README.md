@@ -9,7 +9,7 @@ This mod adds a language adapter for Kotlin and provides multiple libraries.
 To add your language adapter to your mod, add the following lines to your
 (neoforge.)mods.toml.
 
-**mods.toml**
+**neoforge.mods.toml**
 
 ```toml
 modLoader = "klf"
@@ -57,15 +57,14 @@ dependencies {
 
 ### Events
 
-To use automatic event listener registration the `@EventBusSubscriber` annotation has to be added on the class/file.
-Additionally, you can annotate a method with `SubscribeEvent` to adjust the listener's parameters.\
-This is not necessary though!
-Klf automatically looks for events in every method inside the class and automatically
-determines which event bus to use.
+To use automatic event listener registration, the `@EventBusSubscriber` annotation has to be added on the class/file.
+Klf then will automatically find all methods that have events in their parameters and will determine which event bus to
+use.
+Additionally, you can annotate a method with `@SubscribeEvent` to adjust the listener's parameters.
 
 **Note for Forge developers:** Private event listeners cannot be processed on Forge and will result in a crash!
 
-**Mod Bus** The mod bus is available by `dev.nyon.klf.MOD_BUS`.
+**Mod Bus:** The mod bus is available via the top-level declaration `dev.nyon.klf.MOD_BUS`.
 
 ## Included Libraries
 
