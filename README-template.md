@@ -49,7 +49,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.nyon:KotlinLangForge:{version}-{kotlinVersion}-$lpVersion+$loader")
+    implementation("dev.nyon:KotlinLangForge:{version}-k{kotlinVersion}-$lpVersion+$loader")
 }
 ```
 
