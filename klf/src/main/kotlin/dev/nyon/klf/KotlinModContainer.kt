@@ -39,8 +39,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
 
         modClasses = entrypoints.map { entrypoint ->
             tryAndThrowWithModLoadingException("Failed to load class {} $entrypoint.") {
-                val cls = Class.forName(layer, entrypoint)
-                if (cls == null) throw ClassNotFoundException("Class '$entrypoint' could not be found!")
+                val cls = Class.forName(layer, entrypoint) ?: throw ClassNotFoundException("Class '$entrypoint' could not be found!")
                 LOGGER.trace(LOADING, "Loaded modclass {} with {}", cls.name, cls.classLoader)
                 cls
             }
