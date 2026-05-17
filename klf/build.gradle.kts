@@ -113,7 +113,7 @@ tasks {
         val templateText = rootProject.file("README-template.md").readText()
         val inclusionsReplacement = inclusions.joinToString("\n- ", prefix = "- ")
         val replacements = mapOf(
-            "{inclusions}" to inclusionsReplacement, "{version}" to majorVersion, "{kotlinVersion}" to kotlinVersion!!
+            "{inclusions}" to inclusionsReplacement, "{version}" to "$majorVersion${if (beta != 0) "-beta$beta" else ""}", "{kotlinVersion}" to kotlinVersion!!
         )
         val newText: String = templateText.run {
             var processing = this@run
