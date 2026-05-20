@@ -9,15 +9,14 @@ import cpw.mods.modlauncher.api.IncompatibleEnvironmentException;
 import cpw.mods.niofs.union.UnionPath;
 import dev.nyon.klf.compat.kff.accessors.JarAccessor;
 import dev.nyon.klf.compat.kff.accessors.SimpleJarMetadataAccessor;
+import settingdust.preloading_tricks.api.ModManager;
 import settingdust.preloading_tricks.api.PreloadingTricksCallbacks;
 import settingdust.preloading_tricks.api.modlauncher.ModLauncherPreloadingCallbacks;
 //? if forge {
 import cpw.mods.jarhandling.SecureJar;
 import net.minecraftforge.fml.loading.moddiscovery.ModFile;
-import settingdust.preloading_tricks.lexforge.LexForgeModManager;
 //?} else {
 /*import net.neoforged.fml.loading.moddiscovery.ModFile;
-import settingdust.preloading_tricks.neoforge.modlauncher.NeoForgeModManager;
 import java.lang.module.ModuleDescriptor;
 *///?}
 import org.apache.logging.log4j.LogManager;
@@ -51,11 +50,7 @@ public class TransformationService implements ITransformationService {
         });
 
         PreloadingTricksCallbacks.SETUP_MODS.register(_manager -> {
-            /*? if forge {*/
-            LexForgeModManager modManager = (LexForgeModManager) _manager;
-            /*?} else {*/
-            /*NeoForgeModManager modManager = (NeoForgeModManager) _manager;
-            *//*?}*/
+            ModManager<ModFile> modManager = (ModManager<ModFile>) _manager;
 
             ModFile kffFile = null;
             ModFile klfFile = null;

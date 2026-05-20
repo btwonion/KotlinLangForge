@@ -43,7 +43,7 @@ dependencies {
 
     include(project(":klf:${project.name.split(":").last()}"))
     include(implementation("net.lenni0451:Reflect:1.5.0")!!)
-    implementation("maven.modrinth:preloading-tricks:3.3.1")
+    implementation("maven.modrinth:preloading-tricks:3.6.0")
 }
 
 tasks {
