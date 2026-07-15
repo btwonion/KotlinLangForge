@@ -1,1 +1,1 @@
-- build(deps): bump org.jetbrains.kotlin.jvm from 2.3.21 to 2.4.0
+- build(deps): bump org.jetbrains.kotlin.jvm from 2.4.0 to 2.4.10
