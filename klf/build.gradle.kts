@@ -2,6 +2,7 @@
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
+import me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment
 import net.fabricmc.loom.util.ModPlatform
 import org.apache.tools.zip.ZipOutputStream
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -245,6 +246,7 @@ publishMods {
         projectId = "1vrSzlao"
         accessToken = providers.environmentVariable("MODRINTH_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
+        environment = ModrinthEnvironment.CLIENT_OR_SERVER_PREFERS_BOTH
         if (hasCompatService) requires("preloading-tricks")
     }
 
@@ -252,6 +254,8 @@ publishMods {
         projectId = "1244682"
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
         minecraftVersions.addAll(supportedMcVersions)
+        client = true
+        server = true
         if (hasCompatService) requires("preloading-tricks")
     }
 
