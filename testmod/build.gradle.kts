@@ -14,8 +14,8 @@ val mcVersion = property("vers.mcVersion").toString()
 loom {
     if (stonecutter.current.isActive) {
         runConfigs.all {
-            ideConfigGenerated(true)
-            runDir("../../run")
+            generateRunConfig = true
+            runDirectory = project.file("../../run")
         }
     }
 

@@ -35,8 +35,8 @@ base {
 loom {
     if (stonecutter.current.isActive) {
         runConfigs.all {
-            ideConfigGenerated(true)
-            runDir("../../run")
+            generateRunConfig = true
+            runDirectory = project.file("../../run")
         }
     }
 
@@ -51,7 +51,7 @@ repositories {
     maven("https://maven.minecraftforge.net/")
 }
 
-val apiAndShadow: Configuration by configurations.creating {
+val apiAndShadow: Configuration = configurations.create("apiAndShadow") {
     extendsFrom(configurations.api.get())
     extendsFrom(configurations.shadow.get())
 
