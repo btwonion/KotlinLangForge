@@ -99,7 +99,9 @@ val modId = property("mod.id").toString()
 val modDescription = property("mod.description").toString()
 val icon = property("mod.icon").toString()
 val slug = property("mod.slug").toString()
-val mcVersionRange = property("vers.mcVersionRange").toString()
+val supportedMcVersions: List<String> =
+    property("vers.supportedMcVersions").toString().split(',').map(String::trim).filter(String::isNotEmpty)
+val mcVersionRange = supportedMcVersions.joinToString(",") { "[$it]" }
 tasks {
     register("releaseMod") {
         group = "publishing"
@@ -227,8 +229,6 @@ val changelogText = buildString {
 val hasCompatService
     get() = loader == ModPlatform.FORGE
 
-val supportedMcVersions: List<String> =
-    property("vers.supportedMcVersions")!!.toString().split(',').map(String::trim).filter(String::isNotEmpty)
 val transformerJar = if (hasCompatService) project(":kff-compat:${project.name}").tasks.remapJar.flatMap { it.archiveFile } else null
 publishMods {
     displayName = "v${project.version}"
