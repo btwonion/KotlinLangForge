@@ -156,12 +156,14 @@ tasks {
             "repo" to githubRepo,
             "icon" to icon,
             "slug" to slug,
-            "mc" to mcVersionRange
+            "mc" to mcVersionRange,
+            "compatibilityLine" to lPVersion,
+            "supportedMinecraftVersions" to supportedMcVersions.joinToString(",")
         )
 
         props.forEach(inputs::property)
 
-        filesMatching(listOf("META-INF/mods.toml", "META-INF/neoforge.mods.toml")) { expand(props) }
+        filesMatching(listOf("META-INF/mods.toml", "META-INF/neoforge.mods.toml", "META-INF/klf-build.properties")) { expand(props) }
         exclude(if (loader == ModPlatform.NEOFORGE) "META-INF/mods.toml" else "META-INF/neoforge.mods.toml")
     }
 

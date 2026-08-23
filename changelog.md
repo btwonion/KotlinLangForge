@@ -1,1 +1,3 @@
-- lp: >=3.1: fix bug where GameBus was null in AutomaticEventSubscriber
+- improve error handling for wrong versions of Minecraft a lot
+  - now also shows the error in the ModConflicts screen of Forge and NeoForge
+  - fix crash on 1.20.4 NeoForge, where instance was flagged as unsupported by accident [**#131**](https://github.com/btwonion/KotlinLangForge/issues/131)
