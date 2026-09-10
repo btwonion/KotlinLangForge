@@ -1,3 +1,4 @@
 - improve error handling for wrong versions of Minecraft a lot
   - now also shows the error in the ModConflicts screen of Forge and NeoForge
   - fix crash on 1.20.4 NeoForge, where instance was flagged as unsupported by accident [**#131**](https://github.com/btwonion/KotlinLangForge/issues/131)- build(deps): bump org.jetbrains.kotlin.jvm from 2.4.10 to 2.4.20
+- build(deps): bump org.jetbrains.kotlin.jvm from 2.4.10 to 2.4.20
