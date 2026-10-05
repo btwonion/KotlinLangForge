@@ -17,6 +17,11 @@ on:
       - "changelog.md"
       - ".editorconfig"
   workflow_dispatch:
+    inputs:
+      runtime_regressions:
+        description: Run strict regressions after applying the event, Forge and diagnostics fixes
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -35,7 +40,44 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
       - name: Build with Gradle
-        run: ./gradlew build --stacktrace
+        run: ./gradlew build --stacktrace --no-parallel --max-workers=2
       - uses: actions/upload-artifact@v7
         with:
           path: klf/versions/**/build/libs/*.jar
+
+  runtime-behavior:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [2.0-forge, 2.0-neoforge, 3.0-neoforge, 3.1-neoforge]
+    name: Runtime behavior (${{ matrix.version }})
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: temurin
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Check runtime behavior in isolated distribution JVMs
+        run: >-
+          ./gradlew :testmod:${{ matrix.version }}:test
+          :testmod:${{ matrix.version }}:testClientDistribution
+          --stacktrace --no-parallel --max-workers=2
+      - name: Check strict regressions
+        if: ${{ inputs.runtime_regressions }}
+        run: ./gradlew :testmod:${{ matrix.version }}:runtimeRegressionTest --stacktrace --no-parallel --max-workers=2
+      - name: Smoke launch the newest dedicated server
+        if: ${{ matrix.version == '3.1-neoforge' }}
+        run: timeout 300 ./gradlew :testmod:3.1-neoforge:runSmokeServer --stacktrace --no-parallel --max-workers=2
+      - name: Upload runtime reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: runtime-behavior-${{ matrix.version }}
+          path: |
+            testmod/versions/${{ matrix.version }}/build/reports/tests/
+            testmod/versions/${{ matrix.version }}/build/test-results/
+            testmod/versions/${{ matrix.version }}/build/smoke-server/logs/
+            testmod/versions/${{ matrix.version }}/build/smoke-server/result.txt

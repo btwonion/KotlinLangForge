@@ -28,3 +28,18 @@ internal typealias FMLConstructModEvent = /*? if forge {*/  /*net.minecraftforge
 internal typealias PlayerEvent = /*? if forge {*/  /*net.minecraftforge.event.entity.player.PlayerEvent *//*?} else {*/  net.neoforged.neoforge.event.entity.player.PlayerEvent /*?}*/
 internal typealias LoadFromFile = /*? if forge {*/  /*net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile *//*?} else {*/  net.neoforged.neoforge.event.entity.player.PlayerEvent.LoadFromFile /*?}*/
 internal typealias NewRegistryEvent = /*? if forge {*/  /*net.minecraftforge.registries.NewRegistryEvent *//*?} else {*/  net.neoforged.neoforge.registries.NewRegistryEvent /*?}*/
+internal typealias FMLLoadCompleteEvent = /*? if forge {*/ /*net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent *//*?} else {*/ net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent /*?}*/
+internal typealias IModFileInfo = /*? if forge {*/ /*net.minecraftforge.forgespi.language.IModFileInfo *//*?} else {*/ net.neoforged.neoforgespi.language.IModFileInfo /*?}*/
+internal typealias FMLCommonSetupEvent = /*? if forge {*/ /*net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent *//*?} else {*/ net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent /*?}*/
+internal typealias ServerStartedEvent = /*? if forge {*/ /*net.minecraftforge.event.server.ServerStartedEvent *//*?} else {*/ net.neoforged.neoforge.event.server.ServerStartedEvent /*?}*/
+internal typealias IBindingsProvider = /*? if forge {*/ /*net.minecraftforge.fml.IBindingsProvider *//*?} else {*/ net.neoforged.fml.IBindingsProvider /*?}*/
+//? if lp: <=3.0 {
+/*internal typealias ConfigConfig = /^? if forge {^/ /^net.minecraftforge.fml.config.IConfigEvent.ConfigConfig ^//^?} else {^/ net.neoforged.fml.config.IConfigEvent.ConfigConfig /^?}^/
+internal typealias ConfigLoading = /^? if forge {^/ /^net.minecraftforge.fml.event.config.ModConfigEvent.Loading ^//^?} else {^/ net.neoforged.fml.event.config.ModConfigEvent.Loading /^?}^/
+internal typealias ConfigReloading = /^? if forge {^/ /^net.minecraftforge.fml.event.config.ModConfigEvent.Reloading ^//^?} else {^/ net.neoforged.fml.event.config.ModConfigEvent.Reloading /^?}^/
+internal typealias ConfigUnloading = /^? if forge {^/ /^net.minecraftforge.fml.event.config.ModConfigEvent.Unloading ^//^?} else {^/ net.neoforged.fml.event.config.ModConfigEvent.Unloading /^?}^/
+*///?}
+//? if lp: <=2.0 {
+/*internal typealias I18NParser = /^? if forge {^/ /^net.minecraftforge.fml.I18NParser ^//^?} else {^/ net.neoforged.fml.I18NParser /^?}^/
+*///?}
+internal typealias ModList = /*? if forge {*/ /*net.minecraftforge.fml.ModList *//*?} else {*/ net.neoforged.fml.ModList /*?}*/
