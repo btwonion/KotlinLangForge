@@ -43,8 +43,9 @@ object AutomaticEventSubscriber {
             val subscribeEventAnnotation = runCatching { method.getDeclaredAnnotation(SubscribeEvent::class.java) }.getOrNull()
             val isObject = clazz.kotlin.objectInstance != null
             if (!Modifier.isStatic(method.modifiers) && !isObject) return@forEach
+            if (method.parameterCount != 1) return@forEach
             val eventType = method.parameterTypes[0]
-            if (method.parameterCount != 1 || !Event::class.java.isAssignableFrom(eventType)) return@forEach
+            if (!Event::class.java.isAssignableFrom(eventType)) return@forEach
 
             eventType as? Class<Event>
                 ?: throw IllegalStateException("Argument of method $method annotated with @SubscribeEvent was not a subtype of Event.")

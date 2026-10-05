@@ -89,8 +89,9 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
     private fun createMod() {
         modClasses.forEach { modClass ->
             initModClass(modClass)
-            injectAutomaticEventSubscriber()
         }
+        // Subscribers belong to the mod, including when no entrypoint matches the current side.
+        injectAutomaticEventSubscriber()
     }
 
     private fun initModClass(modClass: Class<*>) {
