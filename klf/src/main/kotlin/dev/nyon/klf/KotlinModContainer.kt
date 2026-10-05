@@ -11,6 +11,11 @@ import java.util.function.Supplier
 //? if lp: <=2.0
 //import dev.nyon.klf.mv.ModLoadingStage
 
+//? if forge {
+/*import java.util.Optional
+import java.util.function.Consumer
+*///?}
+
 @Suppress("NO_REFLECTION_IN_CLASS_PATH")
 class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLayer: ModuleLayer, val scanResults: ModFileScanData) : ModContainer(info) {
     companion object {
@@ -19,6 +24,8 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
     }
 
     private val modClasses: List<Class<*>>
+    //? if lp: <=2.0
+    //private val modInstances = mutableListOf<Any>()
     private val layer: Module
     internal val context: KlfLoadingContext
     internal val modBus: IEventBus
@@ -37,6 +44,9 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
             .allowPerPhasePost()
             .build()
 
+        //? if forge
+        //configHandler = Optional.of(Consumer { event -> modBus.post(event.self()) })
+
         modClasses = entrypoints.map { entrypoint ->
             tryAndThrowWithModLoadingException("Failed to load class {} $entrypoint.") {
                 val cls = Class.forName(layer, entrypoint) ?: throw ClassNotFoundException("Class '$entrypoint' could not be found!")
@@ -47,7 +57,7 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
 
         try {
             val contextExtensionField = ModContainer::class.java.getDeclaredField("contextExtension")
-            val legacyExtension = Supplier { KlfLoadingContext }
+            val legacyExtension = Supplier { context }
             contextExtensionField.set(this, legacyExtension)
         } catch (_: NoSuchFieldException) {}
     }
@@ -57,11 +67,11 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
     }
 
     override fun matches(mod: Any?): Boolean {
-        return modClasses.firstOrNull() == mod
+        return modInstances.any { it === mod }
     }
 
     override fun getMod(): Any? {
-        return modClasses.firstOrNull()
+        return modInstances.firstOrNull()
     }
 
     *///?} else {
@@ -88,15 +98,19 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
 
     private fun createMod() {
         modClasses.forEach { modClass ->
-            initModClass(modClass)
+            val instance = initModClass(modClass)
+            //? if lp: <=2.0
+            //modInstances.add(instance)
             injectAutomaticEventSubscriber()
         }
     }
 
-    private fun initModClass(modClass: Class<*>) {
+    private fun initModClass(modClass: Class<*>): Any {
         try {
             val constructors = modClass.constructors
-            if (constructors.size == 0 && modClass.kotlin.objectInstance != null) return
+            if (constructors.size == 0) {
+                modClass.kotlin.objectInstance?.let { return it }
+            }
             if (constructors.size > 1) throw RuntimeException("Mod class $modClass must have exactly 1 public constructor, found ${constructors.size}.")
             val constructor = constructors.first()
 
@@ -110,9 +124,10 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
             val constructorArgs = constructor.parameterTypes.map { type ->
                 allowedConstructorArguments[type] ?: throw RuntimeException("Mod constructor has unsupported argument $type.")
             }
-            constructor.newInstance(*constructorArgs.toTypedArray())
+            val instance = constructor.newInstance(*constructorArgs.toTypedArray())
 
             LOGGER.trace(LOADING, "Loaded mod instance {} of type {}", modId, modClass.name)
+            return instance
         } catch (e: Throwable) {
             LOGGER.error(LOADING, "Failed to create mod instance. ModID: {}, class {}", getModId(), modClass.getName(), if (e is InvocationTargetException) e.cause else e)
             throw modLoadingException(e, modInfo)

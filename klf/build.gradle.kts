@@ -90,6 +90,16 @@ dependencies {
         if (listOf("2.0").contains(lPVersion)) apiAndShadow(it)
         else api(include(it)!!)
     }
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
+    testRuntimeOnly("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.4")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    workingDir(layout.buildDirectory.dir("test-run"))
+    doFirst { workingDir.mkdirs() }
 }
 
 val javaVersion =
