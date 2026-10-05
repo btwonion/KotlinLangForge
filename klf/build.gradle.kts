@@ -7,6 +7,7 @@ import net.fabricmc.loom.util.ModPlatform
 import org.apache.tools.zip.ZipOutputStream
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlin)
@@ -111,21 +112,50 @@ tasks {
     }
 
     register("processReadMeTemplate") {
-        group = "publishing"
+        group = "documentation"
+        description = "Generate README.md from the template and declared KLF variant metadata."
 
-        val templateText = rootProject.file("README-template.md").readText()
-        val inclusionsReplacement = inclusions.joinToString("\n- ", prefix = "- ")
-        val replacements = mapOf(
-            "{inclusions}" to inclusionsReplacement, "{version}" to "$majorVersion${if (beta != 0) "-beta$beta" else ""}", "{kotlinVersion}" to kotlinVersion!!
-        )
-        val newText: String = templateText.run {
-            var processing = this@run
-            replacements.forEach { (key, value) ->
-                processing = processing.replace(key, value)
+        val template = rootProject.file("README-template.md")
+        val readme = rootProject.file("README.md")
+        val variantProperties = rootProject.fileTree("klf/versions") { include("*/gradle.properties") }
+        val releaseVersion = "$majorVersion${if (beta != 0) "-beta$beta" else ""}"
+        inputs.file(template)
+        inputs.files(variantProperties)
+        inputs.property("releaseVersion", releaseVersion)
+        inputs.property("kotlinVersion", kotlinVersion!!)
+        inputs.property("inclusions", inclusions)
+        outputs.file(readme)
+
+        doLast {
+            val compatibility = buildString {
+                appendLine("| Compatibility line | Loader | Declared Minecraft versions | Download name for this checkout |")
+                appendLine("| --- | --- | --- | --- |")
+                variantProperties.files.sortedBy { it.parentFile.name }.forEach { file ->
+                    val properties = Properties().apply { file.inputStream().use { load(it) } }
+                    val line = file.parentFile.name.substringBefore('-')
+                    val platform = properties.getProperty("loom.platform")
+                    val loaderName = when (platform) {
+                        "forge" -> "Forge"
+                        "neoforge" -> "NeoForge"
+                        else -> error("Unsupported loader in $file: $platform")
+                    }
+                    val minecraftVersions = properties.getProperty("vers.supportedMcVersions")
+                        .split(',').map(String::trim).filter(String::isNotEmpty).joinToString(", ")
+                    require(minecraftVersions.isNotEmpty()) { "No supported Minecraft versions in $file" }
+                    appendLine("| $line | $loaderName | $minecraftVersions | `v$releaseVersion-k$kotlinVersion-$line+$platform` |")
+                }
             }
-            processing
+            val replacements = mapOf(
+                "{inclusions}" to inclusions.joinToString("\n- ", prefix = "- "),
+                "{version}" to releaseVersion,
+                "{kotlinVersion}" to kotlinVersion!!,
+                "{compatibility}" to compatibility.trimEnd()
+            )
+            val newText = replacements.entries.fold(template.readText()) { text, (key, value) ->
+                text.replace(key, value)
+            }
+            readme.writeText(newText)
         }
-        rootProject.file("README.md").writeText(newText)
     }
 
     withType<JavaCompile> {
