@@ -46,7 +46,26 @@ dependencies {
     implementation("maven.modrinth:preloading-tricks:3.6.0")
 }
 
+// These checks have a main entry point and do not require a separate test framework.
+val compatibilityChecks = sourceSets.create("compatibilityTest") {
+    compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+}
+
 tasks {
+    val compatibilityTest = register<JavaExec>("compatibilityTest") {
+        group = "verification"
+        description = "Checks early KLF/KFF metadata patching and missing Preloading Tricks diagnostics."
+        dependsOn(compatibilityChecks.classesTaskName)
+        classpath = compatibilityChecks.runtimeClasspath
+        workingDir = layout.buildDirectory.get().asFile
+        mainClass = "dev.nyon.klf.compat.kff.CompatibilityTest"
+        // SecureJar's union filesystem needs the same access supplied by the Forge launcher.
+        jvmArgs("--add-opens=java.base/java.lang.invoke=ALL-UNNAMED")
+    }
+
+    check { dependsOn(compatibilityTest) }
+
     withType<JavaCompile> {
         options.release = 17
     }
