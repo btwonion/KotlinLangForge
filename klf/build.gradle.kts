@@ -77,6 +77,9 @@ val inclusions = listOf(
 )
 
 dependencies {
+    testImplementation(kotlin("test-junit5"))
+    testRuntimeOnly(kotlin("reflect"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.officialMojangMappings())
 
@@ -103,6 +106,13 @@ val supportedMcVersions: List<String> =
     property("vers.supportedMcVersions").toString().split(',').map(String::trim).filter(String::isNotEmpty)
 val mcVersionRange = supportedMcVersions.joinToString(",") { "[$it]" }
 tasks {
+    test {
+        useJUnitPlatform()
+        systemProperty("klf.repositoryRoot", rootProject.projectDir.absolutePath)
+        workingDir(layout.buildDirectory)
+        // Legacy SecureJarHandler needs the same reflective access supplied by the game launcher.
+        jvmArgs("--add-opens=java.base/java.lang.invoke=ALL-UNNAMED")
+    }
     register("releaseMod") {
         group = "publishing"
 

@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.apache.logging.log4j.Marker
 import org.apache.logging.log4j.MarkerManager
-import java.lang.reflect.InvocationTargetException
 import java.util.function.Supplier
 
 //? if lp: <=2.0
@@ -95,26 +94,22 @@ class KotlinModContainer(val info: IModInfo, entrypoints: List<String>, gameLaye
 
     private fun initModClass(modClass: Class<*>) {
         try {
-            val constructors = modClass.constructors
-            if (constructors.size == 0 && modClass.kotlin.objectInstance != null) return
-            if (constructors.size > 1) throw RuntimeException("Mod class $modClass must have exactly 1 public constructor, found ${constructors.size}.")
-            val constructor = constructors.first()
-
             val allowedConstructorArguments = mapOf<Class<*>, Any>(
                 IEventBus::class.java to modBus,
                 ModContainer::class.java to this,
                 KotlinModContainer::class.java to this,
                 Dist::class.java to dist
             )
+            val constructor = findModConstructor(modClass, allowedConstructorArguments.keys) ?: return
 
             val constructorArgs = constructor.parameterTypes.map { type ->
-                allowedConstructorArguments[type] ?: throw RuntimeException("Mod constructor has unsupported argument $type.")
+                allowedConstructorArguments.getValue(type)
             }
             constructor.newInstance(*constructorArgs.toTypedArray())
 
             LOGGER.trace(LOADING, "Loaded mod instance {} of type {}", modId, modClass.name)
         } catch (e: Throwable) {
-            LOGGER.error(LOADING, "Failed to create mod instance. ModID: {}, class {}", getModId(), modClass.getName(), if (e is InvocationTargetException) e.cause else e)
+            LOGGER.error(LOADING, "Failed to create mod instance. ModID: {}, class {}", getModId(), modClass.getName(), e.unwrapInvocationTargetException())
             throw modLoadingException(e, modInfo)
         }
     }
