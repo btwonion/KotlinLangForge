@@ -1,4 +1,3 @@
-- add support for 26.3
 - fix automatic event subscriber crashes on zero-argument methods and duplicate registrations for mods with multiple entrypoints
 - fix legacy mod instance lookup and loading context access
 - forward Forge config loading and reloading events to the mod event bus
