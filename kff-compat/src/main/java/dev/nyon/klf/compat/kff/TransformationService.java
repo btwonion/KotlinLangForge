@@ -37,8 +37,7 @@ public class TransformationService implements ITransformationService {
             registerCallbacks();
         } catch (LinkageError e) {
             String message = "KLF could not register its early KFF compatibility callbacks. "
-                + "Install a compatible Forge release of Preloading Tricks "
-                + "(this service is built against 3.6.0), and check the original error below.";
+                + "Install a compatible Forge release of Preloading Tricks, and check the original error below.";
             LOGGER.error(message, e);
             throw new IllegalStateException(message, e);
         }
