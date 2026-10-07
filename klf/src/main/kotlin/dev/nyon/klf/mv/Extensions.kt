@@ -1,5 +1,7 @@
 package dev.nyon.klf.mv
 
+import java.lang.reflect.InvocationTargetException
+
 //? if lp: >=3.0 {
 import net.neoforged.fml.ModLoadingIssue
 //?}
@@ -18,8 +20,17 @@ internal val gameBus: IEventBus
     get() = /*? if lp: <=2.0 {*/ /*Bindings.getForgeBus().get() *//*?} else if lp: <=3.0 {*/ /*Bindings.getGameBus() *//*?} else {*/ FMLLoader.getCurrent().bindings.gameBus /*?}*/
 
 internal fun modLoadingException(e: Throwable, modInfo: IModInfo): ModLoadingException {
-    return /*? if lp: <=2.0 {*/ /*ModLoadingException(modInfo, ModLoadingStage.CONSTRUCT, "fml.modloading.failedtoloadmod", e)
-        *//*?} else {*/ ModLoadingException(ModLoadingIssue.error("fml.modloadingissue.failedtoloadmod", e).withCause(e).withAffectedMod(modInfo)) /*?}*/
+    val cause = e.unwrapInvocationTargetException()
+    return /*? if lp: <=2.0 {*/ /*ModLoadingException(modInfo, ModLoadingStage.CONSTRUCT, "fml.modloading.failedtoloadmod", cause)
+        *//*?} else {*/ ModLoadingException(ModLoadingIssue.error("fml.modloadingissue.failedtoloadmod", cause).withCause(cause).withAffectedMod(modInfo)) /*?}*/
+}
+
+internal fun Throwable.unwrapInvocationTargetException(): Throwable {
+    var cause = this
+    while (cause is InvocationTargetException) {
+        cause = cause.targetException ?: return cause
+    }
+    return cause
 }
 
 internal val dist: Dist
