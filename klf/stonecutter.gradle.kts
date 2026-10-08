@@ -41,6 +41,7 @@ private data class DiscordWebhook(
 
 val majorVersion = property("mod.major-version").toString()
 val betaVersion = property("mod.beta").toString().toInt()
+val kotlinVersion = libs.versions.kotlin.get()
 val slug = property("mod.slug").toString()
 val repo = property("mod.repo").toString()
 val avatar = property("mod.icon-url").toString()
@@ -51,7 +52,7 @@ val supportedLoaders = property("mod.supported-loaders").toString().split(',').m
 tasks.register("postUpdate") {
     group = "mod"
 
-    val featureVersion = "$majorVersion${if (betaVersion != 0) "-beta$betaVersion" else ""}"
+    val featureVersion = "$majorVersion${if (betaVersion != 0) "-beta$betaVersion" else ""}-k$kotlinVersion"
 
     val url = providers.environmentVariable("DISCORD_WEBHOOK").orNull ?: return@register
     val roleId = providers.environmentVariable("DISCORD_ROLE_ID").orNull ?: return@register
