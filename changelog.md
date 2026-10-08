@@ -5,3 +5,4 @@
 - preserve original exception causes in mod loading errors
 - improve early KLF/KFF compatibility diagnostics, including a Preloading Tricks suggestion when callbacks cannot load
 - build(deps): bump org.jetbrains.kotlin.jvm from 2.4.20 to 2.4.21
+- build(deps): bump org.jetbrains.kotlin.jvm from 2.4.20 to 2.4.21
