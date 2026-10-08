@@ -49,7 +49,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.nyon:KotlinLangForge:2.14.1-k2.4.20-$lpVersion+$loader")
+    implementation("dev.nyon:KotlinLangForge:2.15.0-k2.4.21-$lpVersion+$loader")
 }
 ```
 
@@ -68,10 +68,10 @@ Additionally, you can annotate a method with `@SubscribeEvent` to adjust the lis
 
 ## Included Libraries
 
-- org.jetbrains.kotlin:kotlin-stdlib:2.4.20
-- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.20
-- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.4.20
-- org.jetbrains.kotlin:kotlin-reflect:2.4.20
+- org.jetbrains.kotlin:kotlin-stdlib:2.4.21
+- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.4.21
+- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.4.21
+- org.jetbrains.kotlin:kotlin-reflect:2.4.21
 - org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0
 - org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0
 - org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.11.0
