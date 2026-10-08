@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 mod-publish = "2.1+"
 architectury-loom = "1.17-SNAPSHOT"
 shadow = "9.6.1"
