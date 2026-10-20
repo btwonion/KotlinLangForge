@@ -75,8 +75,8 @@ Additionally, you can annotate a method with `@SubscribeEvent` to adjust the lis
 - org.jetbrains.kotlinx:kotlinx-serialization-core:1.12.0
 - org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0
 - org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.12.0
-- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.12.0
-- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.12.0
+- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0
+- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.11.0
 - org.jetbrains.kotlinx:kotlinx-datetime:0.8.0-0.6.x-compat
 - org.jetbrains.kotlinx:kotlinx-io-core:0.9.1
 - org.jetbrains.kotlinx:kotlinx-io-bytestring:0.9.1
