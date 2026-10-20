@@ -6,3 +6,4 @@
 - improve early KLF/KFF compatibility diagnostics, including a Preloading Tricks suggestion when callbacks cannot load
 - build(deps): bump org.jetbrains.kotlin.jvm from 2.4.20 to 2.4.21
 - build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-json from 1.11.0 to 1.12.0 in /klf
+- build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-json from 1.11.0 to 1.12.0 in /klf
