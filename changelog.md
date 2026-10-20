@@ -1,7 +1,2 @@
-- fix automatic event subscriber crashes on zero-argument methods and duplicate registrations for mods with multiple entrypoints
-- fix legacy mod instance lookup and loading context access
-- forward Forge config loading and reloading events to the mod event bus
-- improve loading errors for incompatible KotlinLangForge artifacts, invalid mod constructors, and invalid annotated event handlers
-- preserve original exception causes in mod loading errors
-- improve early KLF/KFF compatibility diagnostics, including a Preloading Tricks suggestion when callbacks cannot load
-- build(deps): bump org.jetbrains.kotlin.jvm from 2.4.20 to 2.4.21
+
+- build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-core from 1.11.0 to 1.12.0 in /klf
