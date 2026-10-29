@@ -1,2 +1,1 @@
-
-- build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-core from 1.11.0 to 1.12.0 in /klf
+- support `depends` on `@Mod` entrypoints: entrypoints whose required mods are missing are skipped, and entrypoints run in the same order as with NeoForge's Java loader (requires NeoForge 21.11.7 or newer)

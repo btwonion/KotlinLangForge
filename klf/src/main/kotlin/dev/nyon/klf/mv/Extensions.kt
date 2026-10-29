@@ -36,5 +36,8 @@ internal fun Throwable.unwrapInvocationTargetException(): Throwable {
 internal val dist: Dist
     get() = /*? if lp: <=3.0 {*/ /*FMLEnvironment.dist *//*?} else {*/ FMLLoader.getCurrent().dist /*?}*/
 
+internal val loadingModList
+    get() = /*? if lp: <=3.0 {*/ /*FMLLoader.getLoadingModList() *//*?} else {*/ FMLLoader.getCurrent().loadingModList /*?}*/
+
 internal val IModFileInfo.moduleName: String
     get() = /*? if lp: <=3.0 {*/ /*this.moduleName() *//*?} else {*/ this.file.id /*?}*/
