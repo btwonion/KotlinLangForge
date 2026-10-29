@@ -7,8 +7,10 @@ import dev.nyon.klf.mv.ModFileScanData
 import dev.nyon.klf.mv.modLoadingException
 
 //? if lp: >=3.0 {
+import dev.nyon.klf.mv.AnnotationData
 import dev.nyon.klf.mv.ModContainer
 import dev.nyon.klf.mv.dist
+import dev.nyon.klf.mv.loadingModList
 import net.neoforged.fml.ModLoadingIssue
 import net.neoforged.neoforgespi.IIssueReporting
 import net.neoforged.neoforgespi.locating.IModFile
@@ -36,11 +38,20 @@ class KotlinLanguageLoader : IModLanguageLoader {
         val modClasses = scanResults.getAnnotatedBy(Mod::class.java, ElementType.TYPE)
             .filter { data -> data.annotationData["value"] == info.modId }
             .filter { data -> AutomaticEventSubscriber.getSides(data.annotationData["dist"]).contains(dist) }
-            .sorted(Comparator.comparingInt { data -> -AutomaticEventSubscriber.getSides(data.annotationData["dist"]).size })
+            .filter { data -> getDepends(data).all { modId -> loadingModList.getModFileById(modId) != null } }
+            .sorted(
+                Comparator.comparingInt<AnnotationData> { data -> getDepends(data).size }
+                    .thenComparingInt { data -> -AutomaticEventSubscriber.getSides(data.annotationData["dist"]).size }
+            )
             .map { data -> data.clazz.className }
             .toList()
 
         return KotlinModContainer(info, modClasses, layer, scanResults)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun getDepends(data: AnnotationData): List<String> {
+        return data.annotationData["depends"] as List<String>? ?: emptyList()
     }
 
     override fun validate(file: IModFile, loadedContainers: Collection<ModContainer?>, reporter: IIssueReporting) {
