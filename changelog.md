@@ -1,1 +1,2 @@
 - support `depends` on `@Mod` entrypoints: entrypoints whose required mods are missing are skipped, and entrypoints run in the same order as with NeoForge's Java loader (requires NeoForge 21.11.7 or newer)
+- build(deps): bump org.jetbrains.kotlinx:kotlinx-io-bytestring from 0.9.1 to 0.9.2 in /klf
