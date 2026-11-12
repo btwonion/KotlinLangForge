@@ -1,1 +1,2 @@
 - build(deps): bump org.jetbrains.kotlinx:kotlinx-io-core from 0.9.1 to 0.9.2 in /klf
+- build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-core from 1.12.0 to 1.13.0 in /klf
