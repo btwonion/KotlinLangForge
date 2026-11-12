@@ -65,7 +65,7 @@ val inclusions = listOf(
     "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
     "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
     "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
-    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.12.0",
+    "org.jetbrains.kotlinx:kotlinx-serialization-core:1.13.0",
     "org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0",
     "org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.12.0",
     "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0",
