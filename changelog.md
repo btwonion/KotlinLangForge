@@ -1,3 +1,2 @@
-- build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-core from 1.12.0 to 1.13.0 in /klf
-- build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-cbor from 1.12.0 to 1.13.0 in /klf
-- build(deps): bump org.jetbrains.kotlinx:kotlinx-serialization-json from 1.12.0 to 1.13.0 in /klf
+
+- build(deps): bump org.jetbrains.kotlinx:kotlinx-io-bytestring from 0.9.2 to 0.9.3 in /klf
