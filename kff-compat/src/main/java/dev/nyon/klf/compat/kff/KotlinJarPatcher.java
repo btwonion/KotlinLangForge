@@ -31,6 +31,17 @@ import java.util.stream.Collectors;
  * the module system rejects a {@code provides} whose implementation isn't in the module. A service entry is kept as
  * long as at least one of its implementations remains, so a jar's own services (for example a language provider)
  * survive even when KLF provides the same service name.
+ * <p>
+ * What happens to a jar depends on its metadata type:
+ * <ul>
+ *     <li>Mods (a {@code mods.toml}, {@link ModJarMetadata}) and jars without a module-info
+ *     ({@link SimpleJarMetadata}) are patched: they stay loaded and only lose the overlapping packages. A mod is
+ *     never removed, so its mod ID stays available to the mods that depend on it.</li>
+ *     <li>Libraries with an explicit module-info ({@link ModuleJarMetadata}) can't be patched. FML only uses this
+ *     type for jars without a {@code mods.toml}, so such a jar has no mod ID. If KLF provides all its packages, for
+ *     example a {@code kotlin-stdlib} shipped through jar-in-jar, it's removed from the mod list; otherwise it's kept
+ *     and reported.</li>
+ * </ul>
  */
 final class KotlinJarPatcher {
     private KotlinJarPatcher() { }
@@ -40,7 +51,11 @@ final class KotlinJarPatcher {
         UNTOUCHED,
         /** The overlapping packages (and the providers in them) were removed from the jar's metadata. */
         PATCHED,
-        /** Every package of the jar is provided by KLF, but its metadata can't be changed: drop the whole jar. */
+        /**
+         * A library with an explicit module-info (never a mod: FML gives jars with a {@code mods.toml} a
+         * {@link ModJarMetadata}) whose packages are all provided by KLF. Its module can't be patched, so the whole
+         * jar is dropped from the mod list.
+         */
         REMOVE,
         /** The jar overlaps with KLF, but can't be patched. */
         SKIPPED
@@ -75,9 +90,9 @@ final class KotlinJarPatcher {
         if (metadata instanceof ModuleJarMetadata) {
             // An explicit module-info: its package list can't be changed without rewriting the module.
             return kept.isEmpty()
-                ? Result.of(Outcome.REMOVE, stripped, "all packages are provided by KLF")
-                : Result.of(Outcome.SKIPPED, stripped,
-                    "explicit module-info with packages KLF doesn't provide: " + sorted(kept));
+                ? Result.of(Outcome.REMOVE, stripped, "library with a module-info, all packages provided by KLF")
+                : Result.of(Outcome.SKIPPED, stripped, "library with a module-info, which can't be patched, and "
+                    + "packages KLF doesn't provide: " + sorted(kept));
         }
         if (!(metadata instanceof SimpleJarMetadata) && !(metadata instanceof ModJarMetadata)) {
             return Result.of(Outcome.SKIPPED, stripped, "unsupported metadata implementation "

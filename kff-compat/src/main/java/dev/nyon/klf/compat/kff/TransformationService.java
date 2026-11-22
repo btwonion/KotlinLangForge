@@ -104,8 +104,8 @@ public class TransformationService implements ITransformationService {
                 case UNTOUCHED -> { }
                 case PATCHED -> {
                     patched++;
-                    LOGGER.info("Removed {} package(s) KLF provides from {}", result.strippedPackages().size(),
-                        describe(file));
+                    LOGGER.info("Patched {}: removed {} package(s) KLF provides, the jar stays loaded.",
+                        describe(file), result.strippedPackages().size());
                     LOGGER.debug("Removed packages from {}: {}", describe(file),
                         KotlinJarPatcher.sorted(result.strippedPackages()));
                     if (!result.removedProviderClasses().isEmpty()) {
@@ -144,17 +144,19 @@ public class TransformationService implements ITransformationService {
             KotlinJarPatcher.selectRemovals(modManager.all(), removalCandidates, ModFile::getSecureJar);
         for (ModFile file : removalCandidates) {
             if (removed.contains(file)) {
-                LOGGER.info("Removed {} from the mod list, because KLF provides all its packages.", describe(file));
+                LOGGER.info("Removed library {} from the mod list: KLF provides all its packages, and its module-info "
+                    + "can't be patched. It has no mods.toml, so no mod depends on it by mod ID.", describe(file));
             } else {
                 skipped++;
-                LOGGER.warn("Kept {} although KLF provides all its packages, because another module requires {}. "
-                    + "Module resolution may fail on duplicate packages.", describe(file), file.getSecureJar().name());
+                LOGGER.warn("Kept library {} although KLF provides all its packages, because another module requires "
+                    + "module {}. Module resolution may fail on duplicate packages.", describe(file),
+                    file.getSecureJar().name());
             }
         }
         if (!removed.isEmpty()) modManager.removeAll(removed);
 
-        LOGGER.info("KLF Kotlin jar compatibility: patched {}, removed {}, could not patch {} jar(s).",
-            patched, removed.size(), skipped);
+        LOGGER.info("KLF Kotlin jar compatibility: patched {} jar(s), removed {} library jar(s), could not patch {} "
+            + "jar(s).", patched, removed.size(), skipped);
     }
 
     /** The mod file's path, or for jar-in-jar files (whose file path is empty) its module name and URI. */
