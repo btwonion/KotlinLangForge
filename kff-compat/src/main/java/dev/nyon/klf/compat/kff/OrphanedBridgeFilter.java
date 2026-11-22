@@ -35,8 +35,12 @@ import java.util.stream.Stream;
  */
 final class OrphanedBridgeFilter {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final List<IModuleLayerManager.Layer> LAYERS =
-        List.of(IModuleLayerManager.Layer.PLUGIN, IModuleLayerManager.Layer.GAME);
+    /**
+     * Only the plugin layer, where Essential adds its Kotlin jars. Don't create the game layer's list early: Essential
+     * treats the last layer with a list as the current one when renaming its jars, so an early, empty game list makes
+     * it rename nothing, and its Kotlin jars then clash with KLF.
+     */
+    private static final IModuleLayerManager.Layer LAYER = IModuleLayerManager.Layer.PLUGIN;
 
     private OrphanedBridgeFilter() { }
 
@@ -45,10 +49,8 @@ final class OrphanedBridgeFilter {
             IModuleLayerManager manager = Launcher.INSTANCE.findLayerManager().orElseThrow();
             EnumMap<IModuleLayerManager.Layer, List<Object>> layers =
                 RStream.of(manager.getClass()).fields().by("layers").get(manager);
-            for (IModuleLayerManager.Layer layer : LAYERS) {
-                layers.compute(layer, (key, list) ->
-                    new FilteringList(list == null ? new ArrayList<>() : list, key, manager));
-            }
+            layers.compute(LAYER, (key, list) ->
+                new FilteringList(list == null ? new ArrayList<>() : list, key, manager));
         } catch (Throwable t) {
             LOGGER.warn("KLF could not hook into ModLauncher's module layers. Empty Kotlin bridge modules that other "
                 + "mods add won't be filtered, which may fail module resolution.", t);
