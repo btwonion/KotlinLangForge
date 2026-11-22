@@ -87,6 +87,7 @@ public class TransformationService implements ITransformationService {
         int patched = 0;
         int skipped = 0;
         List<ModFile> removalCandidates = new ArrayList<>();
+        List<ModFile> bridges = new ArrayList<>();
         for (ModFile file : List.copyOf(modManager.all())) {
             if (file == klfFile) continue;
 
@@ -126,6 +127,7 @@ public class TransformationService implements ITransformationService {
                     }
                 }
                 case REMOVE -> removalCandidates.add(file);
+                case BRIDGE -> bridges.add(file);
                 case SKIPPED -> {
                     if (result.strippedPackages().isEmpty()) {
                         // Overlap unknown, e.g. a virtual mod that isn't backed by a real jar.
@@ -141,7 +143,14 @@ public class TransformationService implements ITransformationService {
         }
 
         List<ModFile> removed =
-            KotlinJarPatcher.selectRemovals(modManager.all(), removalCandidates, ModFile::getSecureJar);
+            KotlinJarPatcher.selectRemovals(modManager.all(), removalCandidates, bridges, ModFile::getSecureJar);
+        for (ModFile file : bridges) {
+            if (removed.contains(file)) {
+                LOGGER.info("Removed empty library {} from the mod list: it contains no classes and only requires "
+                    + "modules that were removed because KLF provides them: {}", describe(file),
+                    KotlinJarPatcher.sorted(KotlinJarPatcher.requiredModules(file.getSecureJar())));
+            }
+        }
         for (ModFile file : removalCandidates) {
             if (removed.contains(file)) {
                 LOGGER.info("Removed library {} from the mod list: KLF provides all its packages, and its module-info "
@@ -195,7 +204,10 @@ public class TransformationService implements ITransformationService {
     }
 
     @Override
-    public void initialize(IEnvironment iEnvironment) { }
+    public void initialize(IEnvironment iEnvironment) {
+        // Before any service's beginScanning, so the filter wraps the layer lists innermost and runs last.
+        OrphanedBridgeFilter.install();
+    }
 
     @Override
     public void onLoad(

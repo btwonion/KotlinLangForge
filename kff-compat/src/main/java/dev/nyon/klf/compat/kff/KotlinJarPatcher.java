@@ -57,6 +57,11 @@ final class KotlinJarPatcher {
          * jar is dropped from the mod list.
          */
         REMOVE,
+        /**
+         * A library with an explicit module-info and no packages at all, like {@code kotlin-stdlib-jdk8} 2.x, which only
+         * requires {@code kotlin.stdlib}. It's removed together with the modules it requires, if those are removed.
+         */
+        BRIDGE,
         /** The jar overlaps with KLF, but can't be patched. */
         SKIPPED
     }
@@ -80,6 +85,9 @@ final class KotlinJarPatcher {
         }
 
         Set<String> packages = jar.getPackages();
+        if (packages.isEmpty() && JarAccessor.getMetadata(jar) instanceof ModuleJarMetadata) {
+            return Result.of(Outcome.BRIDGE, Set.of(), null);
+        }
         Set<String> stripped = packages.stream().filter(klfPackages::contains).collect(Collectors.toUnmodifiableSet());
         if (stripped.isEmpty()) return Result.of(Outcome.UNTOUCHED, Set.of(), null);
         Set<String> kept = packages.stream()
@@ -161,31 +169,56 @@ final class KotlinJarPatcher {
     static Set<String> requiredModules(SecureJar secureJar) {
         if (!(secureJar instanceof Jar jar)) return Set.of();
         if (!(JarAccessor.getMetadata(jar) instanceof ModuleJarMetadata metadata)) return Set.of();
+        return requiredModules(metadata.descriptor());
+    }
+
+    /** Modules that must be present at runtime: neither {@code static} nor the mandated {@code java.base}. */
+    static Set<String> requiredModules(ModuleDescriptor descriptor) {
         Set<String> required = new HashSet<>();
-        for (ModuleDescriptor.Requires requires : metadata.descriptor().requires()) required.add(requires.name());
+        for (ModuleDescriptor.Requires requires : descriptor.requires()) {
+            if (requires.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC)) continue;
+            if (requires.modifiers().contains(ModuleDescriptor.Requires.Modifier.MANDATED)) continue;
+            required.add(requires.name());
+        }
         return required;
     }
 
     /**
-     * Picks the fully covered jars that can be dropped. A candidate is kept if a remaining explicit module requires
-     * it; repeated until stable, since keeping a jar makes its own requirements matter.
+     * Picks the jars that can be dropped: the fully covered candidates, plus bridges that require one of the dropped
+     * jars. A candidate is kept if a remaining explicit module requires it, and a bridge is kept if it doesn't require
+     * anything that's dropped. Repeated until stable, since keeping a jar makes its own requirements matter.
      */
-    static <T> List<T> selectRemovals(Collection<T> all, List<T> candidates, Function<T, SecureJar> jarOf) {
+    static <T> List<T> selectRemovals(
+        Collection<T> all,
+        List<T> candidates,
+        List<T> bridges,
+        Function<T, SecureJar> jarOf
+    ) {
         List<T> removals = new ArrayList<>(candidates);
+        removals.addAll(bridges);
         boolean changed = true;
         while (changed && !removals.isEmpty()) {
+            Set<String> removedNames = new HashSet<>();
+            for (T file : removals) removedNames.add(jarOf.apply(file).name());
+            changed = removals.removeIf(file -> bridges.contains(file)
+                && safeRequiredModules(jarOf.apply(file)).stream().noneMatch(removedNames::contains));
+
             Set<String> required = new HashSet<>();
             for (T file : all) {
-                if (removals.contains(file)) continue;
-                try {
-                    required.addAll(requiredModules(jarOf.apply(file)));
-                } catch (RuntimeException | LinkageError ignored) {
-                    // A jar whose descriptor can't be read fails resolution on its own; it doesn't block removals.
-                }
+                if (!removals.contains(file)) required.addAll(safeRequiredModules(jarOf.apply(file)));
             }
-            changed = removals.removeIf(file -> required.contains(jarOf.apply(file).name()));
+            changed |= removals.removeIf(file -> required.contains(jarOf.apply(file).name()));
         }
         return removals;
+    }
+
+    private static Set<String> safeRequiredModules(SecureJar jar) {
+        try {
+            return requiredModules(jar);
+        } catch (RuntimeException | LinkageError ignored) {
+            // A jar whose descriptor can't be read fails resolution on its own; it doesn't block removals.
+            return Set.of();
+        }
     }
 
     static List<String> sorted(Set<String> values) {
